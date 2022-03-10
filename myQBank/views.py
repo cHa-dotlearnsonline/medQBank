@@ -82,3 +82,8 @@ def register_view(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "myQBank/register.html")
+
+# remember to migrate the database
+def add_course(request):
+    # do something simmillar to what i did with the follow buttons thing
+    pass

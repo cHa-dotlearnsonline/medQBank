@@ -10,12 +10,18 @@
 <body>
     <!--TODO add the registration view and loging view-->
     <header>
+        {% if user.is_authenticated %}
+        <div>
+            <a href="#"> {{user.username}}</a>
+        </div>
+        {% else %} 
         <div>
             <a href="{% url 'login' %}">Login</a>
         </div>
         <div>
             <a href="{% url 'register' %}">Sign Up</a>
         </div>
+        {% endif %}
     </header>
     {% block body %}
     {% endblock %}   

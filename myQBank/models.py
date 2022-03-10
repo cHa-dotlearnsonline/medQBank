@@ -66,3 +66,10 @@ class GrandAttempt(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     # reference the questions in the attempt
     attemptedQuestions = models.ManyToManyField(Attempted)
+
+# model for the subjects taken by an individual
+class Userscourses(models.Model):
+    # register the user taking that course
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # reference the course being taken
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
