@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
@@ -53,10 +54,31 @@ def login_view(request):
             return render(request, "myQbank/login.html", {
                 "message": "Invalid username and/or password"
             })
-    return render(request, "myQbank/login.html")
+    return render(request, "myQBank/login.html")
 
 # The Register view will be here
 def register_view(request):
     # copy some code for the registration process
-    # do not copy past just do the whole t
-    pass
+
+    if request.method == "POST":
+        username = request.POST["username"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        confirmation = request.POST["confirmation"]
+
+        if password != confirmation:
+            return render(request, "myQBank/register.hmtl", {
+                "message": "Passwords must match"
+            })
+
+        try:
+            user = User.objects.create_user(username, email, password)
+            user.save()
+        except IntegrityError:
+            return render(request, "myQBank/register.html", {
+                "message": "Username already taken."
+            })
+        login(request, user)
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(request, "myQBank/register.html")

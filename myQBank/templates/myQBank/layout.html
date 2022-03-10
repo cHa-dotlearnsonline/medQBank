@@ -8,6 +8,15 @@
     <title>QBank</title>
 </head>
 <body>
+    <!--TODO add the registration view and loging view-->
+    <header>
+        <div>
+            <a href="{% url 'login' %}">Login</a>
+        </div>
+        <div>
+            <a href="{% url 'register' %}">Sign Up</a>
+        </div>
+    </header>
     {% block body %}
     {% endblock %}   
 </body>
