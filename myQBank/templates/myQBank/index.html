@@ -1,0 +1,9 @@
+{% extends "myQBank/layout.html" %}
+{% block body %}
+<h1>Available Courses</h1>
+<ul>
+    {% for subject in courses %}
+    <li> <a href="{% url  'course' subject.course_name  %}"> {{ subject.course_name }} </a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

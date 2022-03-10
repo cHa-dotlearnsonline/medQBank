@@ -1,0 +1,24 @@
+{% extends "myQBank/layout.html" %}
+{% load static %}
+{% block body %}
+<ul>
+    <!-- TODO: make sure that the topic links are clickable
+    I want to make sure that the url is something like:
+    questions/topic_id
+    I'm picking topic id because I think sometopics will have
+    the same title but the be underdifferent courses-->
+    {% for topic in Topics %}
+    <a href="{% url 'questions' topic.id %}"><li>{{ topic.topic_name }}</li></a>
+    {% endfor %}
+</ul>
+<div>
+    {% for question_set in all_questions %} 
+        <p>{{ question_set.0.question}}</p>
+        {% for option in question_set %}
+            <li class = "answer" data-correctness="{{option.correctness}}"> {{ option.option }}</li>
+        {% endfor %}
+    {% endfor %}
+    
+</div>
+<script src="{% static 'myQBank/topics.js' %}"></script>
+{% endblock %}
