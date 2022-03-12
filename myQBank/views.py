@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from .models import User, Course, Topic, Answer, Question
+from .models import User, Course, Topic, Answer, Question, Userscourses
 # Create your views here.
 def index(request):
     # here I will just query for all the courses in my database
@@ -85,5 +85,27 @@ def register_view(request):
 
 # remember to migrate the database
 def add_course(request):
-    # do something simmillar to what i did with the follow buttons thing
-    pass
+    
+    # check if the request method is post
+    if request.method == "POST":
+        # get the value of the course ID
+        user = request.user
+        course_id = request.POST["course_name"]
+        # change The course id into an interger
+        course_id = int(course_id)
+        # grab that course from the database
+        course = Course.objects.get(id=course_id)
+        # add the course and user taking the course to users courses
+        chosen_course = Userscourses(course = course, user = user)
+        chosen_course.save()
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        return HttpResponse("Just add a course mune!!!")
+
+def profile_view(request, username):
+    # get the courses that the user has subscribed to
+    user = User.objects.get(username=username)
+    all_user_courses = Userscourses.objects.filter(user = user)
+    return render(request, 'myQBank/profile.html', {
+        "UsersCourses": all_user_courses
+    })

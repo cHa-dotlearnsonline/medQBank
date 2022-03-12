@@ -5,9 +5,9 @@
     {% for subject in courses %}
     <li> <a href="{% url  'course' subject.course_name  %}"> {{ subject.course_name }} </a></li>
     {% if user.is_authenticated %}
-    <form action="{% url 'addCourse' %}">
+    <form action="{% url 'addCourse' %}" method="post">
         {% csrf_token %}
-    <input type="hidden" name="{{subject.course_name}}" value="{{subject.id}}">
+    <input type="hidden" name="course_name" value="{{subject.id}}">
     <input type="submit" value="Add Course">
     </form>
     {% endif %}

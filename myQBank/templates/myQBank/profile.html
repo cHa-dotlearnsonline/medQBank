@@ -1,8 +1,18 @@
-{% extends 'myQBank/layout.hmtl' %} 
+{% extends 'myQBank/layout.html' %} 
 
 {% block body %} 
 <h2>{{user.username}}'s Profile</h2>
 <div>
     <p>Email: <em>{{user.email}}</em></p>
+</div>
+<div>
+    <ul>
+        {% for subject in UsersCourses %}
+        <li>
+            <a href="{% url 'course' subject.course.course_name %}"> {{subject.course.course_name}}</a>
+        </li>
+        {% endfor %}
+    </ul>
+
 </div>
 {% endblock %} 
