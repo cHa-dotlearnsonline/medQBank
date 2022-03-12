@@ -95,10 +95,14 @@ def add_course(request):
         course_id = int(course_id)
         # grab that course from the database
         course = Course.objects.get(id=course_id)
-        # add the course and user taking the course to users courses
-        chosen_course = Userscourses(course = course, user = user)
-        chosen_course.save()
-        return HttpResponseRedirect(reverse("index"))
+        try:
+            check_addition = Userscourses.objects.get(course = course, user=user)
+            return HttpResponse("You already registered for this course")
+        except Userscourses.DoesNotExist:
+            # add the course and user taking the course to users courses
+            chosen_course = Userscourses(course = course, user = user)
+            chosen_course.save()
+            return HttpResponseRedirect(reverse("index"))
     else:
         return HttpResponse("Just add a course mune!!!")
 
