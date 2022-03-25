@@ -56,6 +56,10 @@ def login_view(request):
             })
     return render(request, "myQBank/login.html")
 
+def logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
+
 # The Register view will be here
 def register_view(request):
     # copy some code for the registration process
