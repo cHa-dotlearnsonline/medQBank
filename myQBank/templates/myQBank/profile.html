@@ -6,28 +6,31 @@
 
     <div class="row">
         <!--this will have the first part of infomation-->
-        <div class="col-md-3">
-            <h2>{{user.username}}'s Profile</h2>
+        <div class="col-md-2">
+            <h4>{{user.username}}'s Profile</h4>
             <div>
                 <p>Email: <em>{{user.email}}</em></p>
             </div>
         </div>
-        <h1>Your Courses</h1>
-        {% for subject in UsersCourses %}
-        <div class="col-md-6">
-            <!--Add a Card for the subject here-->
-            <a href="{% url  'course' subject.course.course_name  %}">
-                <div class="card mb-3">
-                    <img class="card-img-top card-image" src="{{subject.course.image_url}}"
-                        alt="{{subject.course.course_name}} picture">
-                    <div class="card-body">
-                        <h4 class="card-title"> {{ subject.course.course_name }}</h4>
-                        <p class="card-text">This is {{subject.course.course_name}}</p>
+        <!-- What the other column will be -->
+        <div class="col-md-9">
+            <h1>Your Courses</h1>
+            {% for subject in UsersCourses %}
+            <div class="col-md-4">
+                <!--Add a Card for the subject here-->
+                <a href="{% url  'course' subject.course.course_name  %}">
+                    <div class="card mb-3">
+                        <img class="card-img-top card-image" src="{{subject.course.image_url}}"
+                            alt="{{subject.course.course_name}} picture">
+                        <div class="card-body">
+                            <h4 class="card-title"> {{ subject.course.course_name }}</h4>
+                            <p class="card-text">This is {{subject.course.course_name}}</p>
+                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 
 </div>
