@@ -9,6 +9,7 @@ class User(AbstractUser):
 # This just records the particular course
 class Course(models.Model):
     course_name = models.CharField(max_length=255)
+    image_url = models.URLField(blank = True)
     typical_year = models.IntegerField(blank=True)
     def __str__(self):
         return f"{self.course_name}"

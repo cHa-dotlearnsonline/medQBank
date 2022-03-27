@@ -56,7 +56,8 @@ def login_view(request):
             })
     return render(request, "myQBank/login.html")
 
-def logout(request):
+# We are logging out people here
+def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
