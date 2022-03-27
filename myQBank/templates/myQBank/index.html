@@ -10,7 +10,7 @@
                 <!--Add a Card for the subject here-->
                 <a href="{% url  'course' subject.course_name  %}">
                 <div class="card mb-3">
-                    <img class="card-img-top" style="height: 30vw; object-fit: cover;" src="{{subject.image_url}}" alt="physiological man">
+                    <img class="card-img-top card-image" src="{{subject.image_url}}" alt="physiological man">
                     <div class="card-body">
                         <h4 class="card-title"> {{ subject.course_name }}</h4>
                         <p class="card-text">This is {{subject.course_name}}</p>
