@@ -6,30 +6,50 @@
 
     <div class="row">
         <!--this will have the first part of infomation-->
-        <div class="col-md-2">
-            <h4>{{user.username}}'s Profile</h4>
-            <div>
-                <p>Email: <em>{{user.email}}</em></p>
-            </div>
-        </div>
-        <!-- What the other column will be -->
-        <div class="col-md-9">
-            <h1>Your Courses</h1>
-            {% for subject in UsersCourses %}
-            <div class="col-md-4">
-                <!--Add a Card for the subject here-->
-                <a href="{% url  'course' subject.course.course_name  %}">
-                    <div class="card mb-3">
-                        <img class="card-img-top card-image" src="{{subject.course.image_url}}"
-                            alt="{{subject.course.course_name}} picture">
-                        <div class="card-body">
-                            <h4 class="card-title"> {{ subject.course.course_name }}</h4>
-                            <p class="card-text">This is {{subject.course.course_name}}</p>
-                        </div>
+        <div class="col-md-2 bd-sidebar">
+            <div class="container-fluid">
+                <div class="row">
+                    <div>
+                        <h5>{{user.username}}'s Profile</h5>
+                        Email: <br>
+                        <em> {{user.email}} </em>
                     </div>
-                </a>
+                    <div class="stats">
+                        your statistics
+                    </div>
+
+                </div>
+
             </div>
-            {% endfor %}
+ 
+        </div>
+       
+
+        <!-- What the other column will be -->
+        <div class="col-md-10">
+            <div class="container-fluid">
+                <h1>Your Courses</h1>
+                <div class="row">
+
+                    {% for subject in UsersCourses %}
+                    <div class="col-md-6">
+                        <!--Add a Card for the subject here-->
+                        <a href="{% url  'course' subject.course.course_name  %}">
+                            <div class="card mb-3">
+                                <img class="card-img-top card-image" src="{{subject.course.image_url}}"
+                                    alt="{{subject.course.course_name}} picture">
+                                <div class="card-body">
+                                    <h4 class="card-title"> {{ subject.course.course_name }}</h4>
+                                    <p class="card-text">This is {{subject.course.course_name}}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
         </div>
     </div>
 
