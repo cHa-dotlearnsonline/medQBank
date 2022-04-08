@@ -1,6 +1,7 @@
+import json
 from django.shortcuts import render
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from .models import User, Course, Topic, Answer, Question, Userscourses
@@ -89,27 +90,37 @@ def register_view(request):
         return render(request, "myQBank/register.html")
 
 # remember to migrate the database
-def add_course(request):
+def add_course(request, courseName):
     
     # check if the request method is post
     if request.method == "POST":
         # get the value of the course ID
         user = request.user
-        course_id = request.POST["course_name"]
-        # change The course id into an interger
-        course_id = int(course_id)
-        # grab that course from the database
-        course = Course.objects.get(id=course_id)
+        data = json.loads(request.body)
+        if data.get("courseID") is not None:
+            course_id = int(data["courseID"])
+            # change The course id into an interger
+            course_id = int(course_id)
+            # grab that course from the database
+            course = Course.objects.get(id=course_id)
+            try:
+                check_addition = Userscourses.objects.get(course = course, user=user)
+                check_addition.delete()
+                return HttpResponse(status=204)
+            except Userscourses.DoesNotExist:
+                # add the course and user taking the course to users courses
+                chosen_course = Userscourses(course = course, user = user)
+                chosen_course.save()
+                return HttpResponse(status=204)
+
+    elif request.method == "GET":
+        # add for checking if the user already has the course added
+        course_taken = Course.objects.get(id = courseName)
         try:
-            check_addition = Userscourses.objects.get(course = course, user=user)
-            return HttpResponse("You already registered for this course")
+            check_add = Userscourses.objects.get(course = course_taken)
+            return JsonResponse({"taking":True})
         except Userscourses.DoesNotExist:
-            # add the course and user taking the course to users courses
-            chosen_course = Userscourses(course = course, user = user)
-            chosen_course.save()
-            return HttpResponseRedirect(reverse("index"))
-    else:
-        return HttpResponse("Just add a course mune!!!")
+            return JsonResponse({"taking":False})
 
 def profile_view(request, username):
     # get the courses that the user has subscribed to

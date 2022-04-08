@@ -16,7 +16,7 @@ urlpatterns = [
     path("questions/<int:topic_id>", views.questions_view, name="questions"),
     path("login", views.login_view, name="login"),
     path("register", views.register_view, name="register"),
-    path("addCourse", views.add_course, name="addCourse"),
+    path("addCourse/<int:courseName>", views.add_course, name="addCourse"),
     path("profile/<str:username>", views.profile_view, name="profile"),
     path("logout", views.logout_view, name="logout")
 ]

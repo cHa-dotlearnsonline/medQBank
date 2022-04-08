@@ -1,31 +1,34 @@
 {% extends "myQBank/layout.html" %}
+{% load static %}
 {% block body %}
 
-    <div class="container-fluid">
-        <h1>Available Courses</h1>
-        <div class="row">
-            
-            {% for subject in courses %}
-            <div class="col-md-6">
-                <!--Add a Card for the subject here-->
-                <a href="{% url  'course' subject.course_name  %}">
+<div class="container-fluid">
+    <h1>Available Courses</h1>
+    <div class="row">
+
+        {% for subject in courses %}
+        <div class="col-md-6">
+            <!--Add a Card for the subject here-->
+            <a href="{% url  'course' subject.course_name  %}">
                 <div class="card mb-3">
                     <img class="card-img-top card-image" src="{{subject.image_url}}" alt="physiological man">
                     <div class="card-body">
                         <h4 class="card-title"> {{ subject.course_name }}</h4>
                         <p class="card-text">This is {{subject.course_name}}</p>
+                    </a>
                         {% if user.is_authenticated %}
-                        <form action="{% url 'addCourse' %}" method="post">
+                        <form action="#NothingToGoTo">
                             {% csrf_token %}
-                        <input type="hidden" name="course_name" value="{{subject.id}}">
-                        <input class="btn btn-primary" type="submit" value="Add Course">
                         </form>
+                        <!-- Let's first add a button that just deals with adding and removing of the course-->
+                        <button class="available-course btn btn-primary" id="course{{subject.id}}"
+                            name="{{subject.id}}">Add</button>
                         {% endif %}
                     </div>
                 </div>
-            </a>
-            </div>
-            {% endfor %}
         </div>
+        {% endfor %}
+    </div>
 </div>
+<script src="{% static 'myQBank/add_remove_course.js' %}"></script>
 {% endblock %}
