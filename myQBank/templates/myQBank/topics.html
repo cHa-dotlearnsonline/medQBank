@@ -7,18 +7,44 @@
     questions/topic_id
     I'm picking topic id because I think sometopics will have
     the same title but the be underdifferent courses-->
+    {% if user.is_authenticated %}
     {% for topic in Topics %}
-    <a href="{% url 'questions' topic.id %}"><li>{{ topic.topic_name }}</li></a>
+    <a href="{% url 'questions' topic.id %}">
+        <li>{{ topic.topic_name }}</li>
+    </a>
     {% endfor %}
+    {% else %}
+    <p>Please <a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Sign Up</a> to see material </p>
+    {% endif %}
 </ul>
-<div>
-    {% for question_set in all_questions %} 
-        <p>{{ question_set.0.question}}</p>
-        {% for option in question_set %}
-            <li class = "answer" data-correctness="{{option.correctness}}"> {{ option.option }}</li>
-        {% endfor %}
-    {% endfor %}
-    
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            
+            {% if user.is_authenticated %}
+                {% if all_questions %}
+                    {% for question_set in all_questions %}
+                        <p>{{forloop.counter}}. {{ question_set.0.question}}</p>
+                                {% for option in question_set %}
+                                    <li class="answer" data-correctness="{{option.correctness}}"> {{ option.option }}</li>
+                                {% endfor %}
+                                <br>
+                    {% endfor %}
+
+                {% endif %}
+
+                {% if message %} 
+                    <p>{{ message }}</p>
+                {% endif %}
+                
+            {% else %}
+                <p>Please <a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Sign Up</a> to see
+                    material </p>
+            {% endif %}
+
+        </div>
+    </div>
+
 </div>
 <script src="{% static 'myQBank/topics.js' %}"></script>
 {% endblock %}

@@ -17,9 +17,14 @@ def course_view(request, course):
     #use the get method to only get one result
     desired_course = Course.objects.get(course_name = course)
     course_topics = Topic.objects.filter(course = desired_course)
-    return render (request, "myQBank/topics.html", {
-        "Topics": course_topics
-    })
+    if len(course_topics) >= 1:
+        return render (request, "myQBank/topics.html", {
+            "Topics": course_topics
+            })
+    else:
+        return render (request, "myQBank/topics.html",{
+            "message": "No questions or Topics Yet"    
+        })
     
 # in this view I only aim to produce those questions
 # and answers in with that topic
@@ -39,7 +44,7 @@ def questions_view(request, topic_id):
         all_answers.append(get_answers)
     return render (request, "myQBank/topics.html", {
         "all_questions" : all_answers
-    })
+        })
 
 def login_view(request):
     # the login process here

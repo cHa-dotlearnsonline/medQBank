@@ -4,6 +4,7 @@ add_course()
 function add_course() {
     const csrftoken = getCookie('csrftoken')
     // let's get all the buttons which reference a course
+    const profilePage = document.querySelector('#profile-checker')
     courseNameNodeList = document.querySelectorAll(".available-course")
     courseNameNodeList.forEach(course => {
         var idCourseName = course.getAttribute('id')
@@ -32,9 +33,14 @@ function add_course() {
                 mode: 'same-origin'
             })
             courseButton = document.querySelector(`#course${courseID}`)
-            if (courseButton.innerHTML === "Add") {
+            if (profilePage !== null && courseButton.innerHTML === "Remove") {
+                stop_showing = document.querySelector(`#card${courseID}`)
+                stop_showing.style.display = 'none'
                 courseButton.innerHTML = "Remove"
-            } else if (courseButton.innerHTML === "Remove") {
+            } else if(profilePage == null && courseButton.innerHTML === "Add") {
+                courseButton.innerHTML = "Remove"
+            }
+             else if (profilePage == null && courseButton.innerHTML === "Remove") {
                 courseButton.innerHTML = "Add"
             }
 
