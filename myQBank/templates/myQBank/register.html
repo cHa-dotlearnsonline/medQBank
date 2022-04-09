@@ -1,29 +1,35 @@
 {% extends "myQBank/layout.html" %}
 
-{% block body %} 
-
-    <h2>Sign Up</h2>
-    {% if message %}
-        {{message}}
-    {% endif %}
-    
-    <form action="{% url 'register' %}" method="post">
-        {% csrf_token %} 
-        <div class="form-group">
-            <input class="form-control" type="text" name="username" id="" placeholder="Username">
+{% block body %}
+{% if message %}
+{{message}}
+{% endif %}
+<section class="form-center">
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center">
+            <h2 class="col-sm-12">Sign Up</h2>
+            <div class="col-md-6">
+                <form action="{% url 'register' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="username" id="" placeholder="Username">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" class="form-control" placeholder="Your Email Address">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" placeholder="Password" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="confirmation" placeholder="Confirm Password" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Sign Up" class="btn btn-primary">
+                    </div>
+                </form>
+                Alreay have an account? <a href="{% url 'login' %}">Login</a> here
+            </div>
         </div>
-        <div class="form-group">
-            <input type="email" name="email" class="form-control" placeholder="Your Email Address">
-        </div>
-        <div class="form-group">
-            <input type="password" name="password" placeholder="Password" class="form-control">
-        </div>
-        <div class="form-group">
-            <input type="password" name="confirmation" placeholder="Confirm Password" class="form-control">
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Sign Up" class="btn btn-primary">
-        </div>
-    </form>
-    Alreay have an account? <a href="{% url 'login' %}">Login</a> here
+    </div>
+</section>
 {% endblock %}

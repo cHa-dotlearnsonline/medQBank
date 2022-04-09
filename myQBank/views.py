@@ -78,7 +78,7 @@ def register_view(request):
         confirmation = request.POST["confirmation"]
 
         if password != confirmation:
-            return render(request, "myQBank/register.hmtl", {
+            return render(request, "myQBank/register.html", {
                 "message": "Passwords must match"
             })
 
