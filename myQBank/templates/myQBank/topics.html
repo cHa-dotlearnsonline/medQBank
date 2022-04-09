@@ -23,6 +23,8 @@
             
             {% if user.is_authenticated %}
                 {% if all_questions %}
+                <button class="btn btn-secondary" id="attemptButton" data-id="{{all_questions.0.0.question.course.id}}">Attempt</button>
+                <div id="messenger"></div>
                     {% for question_set in all_questions %}
                         <p>{{forloop.counter}}. {{ question_set.0.question}}</p>
                                 {% for option in question_set %}
@@ -36,10 +38,6 @@
                 {% if message %} 
                     <p>{{ message }}</p>
                 {% endif %}
-                
-            {% else %}
-                <p>Please <a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Sign Up</a> to see
-                    material </p>
             {% endif %}
 
         </div>
