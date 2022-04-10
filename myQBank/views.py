@@ -1,6 +1,6 @@
 import json
 from django.shortcuts import render
-from django.db import IntegrityError
+from django.db import DataError, IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
@@ -134,3 +134,20 @@ def profile_view(request, username):
     return render(request, 'myQBank/profile.html', {
         "UsersCourses": all_user_courses
     })
+
+
+def attempt_records(request):
+    # add the logic here that unpacks the information that will be 
+    # sent to me from the client side
+    if request.method == "POST":
+        data = json.loads(request.body)
+        if data.get("attempts") is not None:
+            user = request.user
+            question_id = int(data["question"])
+            attempts = int(data["attempts"])
+            correct = int(data["correct"])
+            course = data["course"]
+
+            question = Question.objects.get(id = question_id)
+            course = Course.objects.get(course_name = course)
+            pass

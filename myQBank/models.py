@@ -56,8 +56,17 @@ class Attempted(models.Model):
     totalAttempts = models.IntegerField(default=0)
     # write number of correct attempts
     correctAttempts = models.IntegerField(default=0)
-    # the rest will be attempts that are wrong
-    #I will probably not record them I will just do some quick maths on them
+    #reference the course that this whole attempt was for
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "question": self.question,
+            "user": self.user,
+            "Attempts": self.totalAttempts,
+            "correct": self.correctAttempts
+        }
 
 # create a model that takes note oh how many grand attempts they have made
 # in this case a grand session means how many topics have all the topics
