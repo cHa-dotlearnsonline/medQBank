@@ -4,7 +4,7 @@ from django.db import DataError, IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from .models import User, Course, Topic, Answer, Question, Userscourses
+from .models import Attempted, User, Course, Topic, Answer, Question, Userscourses
 # Create your views here.
 def index(request):
     # here I will just query for all the courses in my database
@@ -150,4 +150,16 @@ def attempt_records(request):
 
             question = Question.objects.get(id = question_id)
             course = Course.objects.get(course_name = course)
+            # enter the data collected
+            try:
+                second_attempt = Attempted.objects.get(question = question)
+                second_attempt.totalAttempts = second_attempt.totalAttempts + attempts
+                second_attempt.correctAttempts = second_attempt.correctAttempts + correct
+                second_attempt.save()
+                return HttpResponse(status=204)
+            except Attempted.DoesNotExist:
+                attempt_data = Attempted(question = question, user = user,
+                totalAttempts = attempts, correctAttempts = correct, course = course)
+                attempt_data.save()
+                return HttpResponse(status=204)
             pass

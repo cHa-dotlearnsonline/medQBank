@@ -57,7 +57,7 @@ class Attempted(models.Model):
     # write number of correct attempts
     correctAttempts = models.IntegerField(default=0)
     #reference the course that this whole attempt was for
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, default=None,on_delete=models.CASCADE)
 
     def serialize(self):
         return {
@@ -65,7 +65,8 @@ class Attempted(models.Model):
             "question": self.question,
             "user": self.user,
             "Attempts": self.totalAttempts,
-            "correct": self.correctAttempts
+            "correct": self.correctAttempts,
+            "course": self.course
         }
 
 # create a model that takes note oh how many grand attempts they have made
