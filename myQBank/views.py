@@ -162,4 +162,3 @@ def attempt_records(request):
                 totalAttempts = attempts, correctAttempts = correct, course = course)
                 attempt_data.save()
                 return HttpResponse(status=204)
-            pass

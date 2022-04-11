@@ -20,24 +20,27 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12">
-            
+
             {% if user.is_authenticated %}
-                {% if all_questions %}
-                <button class="btn btn-secondary" id="attemptButton" data-id="{{all_questions.0.0.question.course.id}}">Attempt</button>
-                <div id="messenger"></div>
-                    {% for question_set in all_questions %}
-                        <p>{{forloop.counter}}. {{ question_set.0.question}}</p>
-                                {% for option in question_set %}
-                                    <li class="answer" data-correctness="{{option.correctness}}"> {{ option.option }}</li>
-                                {% endfor %}
-                                <br>
-                    {% endfor %}
+            {% if all_questions %}
+            <button class="btn btn-secondary" id="attemptButton"
+                data-id="{{all_questions.0.0.question.course.id}}">Attempt</button>
+            <div id="messenger"></div>
+            {% for question_set in all_questions %}
+            <p id="question{{question_set.0.question.id}}" data-attempts="0">{{forloop.counter}}. 
+                {{question_set.0.question}}</p>
+            {% for option in question_set %}
+            <li class="answer" data-correctness="{{option.correctness}}" data-clicked="0"
+                data-questionid="{{option.question.id}}"> {{ option.option }}</li>
+            {% endfor %}
+            <br>
+            {% endfor %}
 
-                {% endif %}
+            {% endif %}
 
-                {% if message %} 
-                    <p>{{ message }}</p>
-                {% endif %}
+            {% if message %}
+            <p>{{ message }}</p>
+            {% endif %}
             {% endif %}
 
         </div>

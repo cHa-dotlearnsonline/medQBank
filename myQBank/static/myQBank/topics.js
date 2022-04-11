@@ -15,15 +15,31 @@ function allowAttempt() {
                     attempt_button.innerHTML = "Stop Attempt"
                     answer_set = document.querySelectorAll(".answer")
                     answer_set.forEach(answer => {
-                        answer.addEventListener('click', () => {
-                            trueness = answer.dataset.correctness
-                            var button2 = document.querySelector('#attemptButton')
-                            if (button2.innerHTML === "Stop Attempt" && trueness === "True") {
-                                answer.style.color ="green"
-                            }else if (button2.innerHTML === "Stop Attempt" && trueness ==="False") {
-                                answer.style.color ="red"
-                            }
-                        })
+                        var clickedness = answer.dataset.clicked
+                        clickedness = parseInt(clickedness)
+                        if (clickedness === 0) {
+                            answer.addEventListener('click', () => {
+                                
+                                var questionID = parseInt(answer.dataset.questionid)
+                                var questionNumber = document.querySelector(`#question${questionID}`)
+                                console.log(answer.dataset.clicked)
+                                if (parseInt(answer.dataset.clicked) === 0) {
+                                    questionNumber.dataset.attempts = parseInt(questionNumber.dataset.attempts) + 1  
+                                }
+                                answer.dataset.clicked = 1
+                                
+                                var trueness = answer.dataset.correctness
+                                var button2 = document.querySelector('#attemptButton')
+                                console.log(questionNumber.dataset.attempts)
+                                if (button2.innerHTML === "Stop Attempt" && trueness === "True") {
+                                    answer.style.color ="green"
+                                } else if (button2.innerHTML === "Stop Attempt" && trueness ==="False") {
+                                    answer.style.color = "red"
+                                }
+                            })
+
+                        }
+
                     })
 
                 } else if (attempt_button.innerHTML === "Stop Attempt") {
