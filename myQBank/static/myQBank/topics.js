@@ -5,6 +5,7 @@ function allowAttempt() {
     var attempt_button_id = attempt_button.dataset.id
     var courseID = parseInt(attempt_button_id)
     var attemptedQuestionsList = []
+    var allready_attempted = {}
     fetch(`http://127.0.0.1:8000/addCourse/${courseID}`)
         .then(response => response.json())
         .then(taken => {
@@ -49,6 +50,7 @@ function allowAttempt() {
                         })
 
                     } else if (attempt_button.innerHTML === "Stop Attempt") {
+                        var tracker = 0
                         attemptedQuestionsList.forEach(question => {
                             var questionDetails = document.querySelector(`#${question}`)
                             var correctAnswerClicked = questionDetails.dataset.correct
@@ -62,9 +64,11 @@ function allowAttempt() {
                             var course = questionDetails.dataset.course
                             var topic = questionDetails.dataset.topic
 
-                            console.log(`Correct Clicks: ${correct},\nQuestion ID: ${question_id},\nTotal Attempts: ${attempts},\nCourse: ${course},\nTopic: ${topic}\n`) 
-                            console.log(attemptedQuestionsList)
-                            index = attemptedQuestionsList.indexOf(question)
+                            //console.log(`Correct Clicks: ${correct},\nQuestion ID: ${question_id},\nTotal Attempts: ${attempts},\nCourse: ${course},\nTopic: ${topic}\n`)
+                            if (allready_attempted[`${question}`] === undefined || allready_attempted[`${question}`] !== attempts) {
+                                allready_attempted[`${question}`] = attempts
+                                console.log(`Correct Clicks: ${correct},\nQuestion ID: ${question_id},\nTotal Attempts: ${attempts},\nCourse: ${course},\nTopic: ${topic}\n`)
+                            }
                             attempt_button.innerHTML = "Attempt"
                         })
                     }
