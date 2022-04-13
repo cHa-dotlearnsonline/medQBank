@@ -59,6 +59,9 @@ class Attempted(models.Model):
     #reference the course that this whole attempt was for
     course = models.ForeignKey(Course, default=None,on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"Total Attempts: {self.totalAttempts}, Total Correct: {self.correctAttempts}"
+
     def serialize(self):
         return {
             "id": self.id,

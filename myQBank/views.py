@@ -147,6 +147,7 @@ def attempt_records(request):
             attempts = int(data["attempts"])
             correct = int(data["correct"])
             course = data["course"]
+            topic = data["topic"]
 
             question = Question.objects.get(id = question_id)
             course = Course.objects.get(course_name = course)

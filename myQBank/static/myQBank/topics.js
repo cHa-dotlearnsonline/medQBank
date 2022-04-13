@@ -1,6 +1,7 @@
 allowAttempt()
 
 function allowAttempt() {
+    const csrftoken = getCookie('csrftoken')
     var attempt_button = document.querySelector('#attemptButton')
     var attempt_button_id = attempt_button.dataset.id
     var courseID = parseInt(attempt_button_id)
@@ -50,7 +51,6 @@ function allowAttempt() {
                         })
 
                     } else if (attempt_button.innerHTML === "Stop Attempt") {
-                        var tracker = 0
                         attemptedQuestionsList.forEach(question => {
                             var questionDetails = document.querySelector(`#${question}`)
                             var correctAnswerClicked = questionDetails.dataset.correct
@@ -64,15 +64,26 @@ function allowAttempt() {
                             var course = questionDetails.dataset.course
                             var topic = questionDetails.dataset.topic
 
-                            //console.log(`Correct Clicks: ${correct},\nQuestion ID: ${question_id},\nTotal Attempts: ${attempts},\nCourse: ${course},\nTopic: ${topic}\n`)
                             if (allready_attempted[`${question}`] === undefined || allready_attempted[`${question}`] !== attempts) {
                                 allready_attempted[`${question}`] = attempts
                                 console.log(`Correct Clicks: ${correct},\nQuestion ID: ${question_id},\nTotal Attempts: ${attempts},\nCourse: ${course},\nTopic: ${topic}\n`)
+                                fetch('http://127.0.0.1:8000/attempts', {
+                                    method: 'POST',
+                                    body: JSON.stringify({
+                                        question: question_id,
+                                        attempts: attempts,
+                                        correct: correct,
+                                        course: course,
+                                        topic: topic
+                                    }),
+                                    headers: { 'X-CSRFToken': csrftoken },
+                                    mode: 'same-origin'
+                                })
                             }
-                            attempt_button.innerHTML = "Attempt"
                         })
+                        attempt_button.innerHTML = "Attempt"
                     }
-                    
+
                 })
             } else {
                 messenger = document.querySelector('#messenger')
@@ -82,4 +93,20 @@ function allowAttempt() {
                 attempt_button.style.display = 'none'
             }
         })
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break
+            }
+        }
+    }
+    return cookieValue;
 }

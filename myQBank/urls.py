@@ -19,6 +19,6 @@ urlpatterns = [
     path("addCourse/<int:courseName>", views.add_course, name="addCourse"),
     path("profile/<str:username>", views.profile_view, name="profile"),
     path("logout", views.logout_view, name="logout"),
-    #this part has the path for how I record the attempst of each candidate
+    #this part has the path for how I record the attempts of each candidate
     path("attempts", views.attempt_records, name="attempts")
 ]
