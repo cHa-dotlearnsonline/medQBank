@@ -15,15 +15,15 @@
                         <em> {{user.email}} </em>
                     </div>
                     <div class="stats">
-                        your statistics
+
                     </div>
 
                 </div>
 
             </div>
- 
+
         </div>
-       
+
 
         <!-- What the other column will be -->
         <div class="col-md-10">
@@ -36,30 +36,37 @@
                         <!--Add a Card for the subject here-->
                         <a href="{% url  'course' subject.course.course_name  %}">
                             <div class="card mb-3">
-                                <img class="card-img-top card-image" src="{{subject.course.image_url}}" alt="{{subject.course.course_name}}">
+                                <img class="card-img-top card-image" src="{{subject.course.image_url}}"
+                                    alt="{{subject.course.course_name}}">
                                 <div class="card-body">
                                     <h4 class="card-title"> {{ subject.course.course_name }}</h4>
                                     <p class="card-text">This is {{subject.course.course_name}}</p>
-                                </a>
-                                    {% if user.is_authenticated %}
-                                    <form action="#NothingToGoTo">
-                                        {% csrf_token %}
-                                    </form>
-                                    <!-- Let's first add a button that just deals with adding and removing of the course-->
-                                    <button class="available-course btn btn-primary" id="course{{subject.course.id}}"
-                                        name="{{subject.course.id}}">Add</button>
-                                    {% endif %}
-                                </div>
+                        </a>
+                        {% if user.is_authenticated %}
+                        <form action="#NothingToGoTo">
+                            {% csrf_token %}
+                        </form>
+                        <!-- Let's first add a button that just deals with adding and removing of the course-->
+                        <button class="available-course btn btn-primary" id="course{{subject.course.id}}"
+                            name="{{subject.course.id}}">Add</button>
+                        <button class="subjectStats btn btn-sm btn-outline-primary"
+                            data-course="{{subject.course.id}}">Your Stats</button>
+                            <div id="display-stats{{subject.course.id}}">
+
                             </div>
+                        {% endif %}
                     </div>
-                    {% endfor %}
                 </div>
             </div>
-
-
+            {% endfor %}
         </div>
     </div>
 
+
+</div>
+</div>
+
 </div>
 <script src="{% static 'myQBank/add_remove_course.js' %}"></script>
+<script src="{% static 'myQBank/checkstats.js' %}"></script>
 {% endblock %}

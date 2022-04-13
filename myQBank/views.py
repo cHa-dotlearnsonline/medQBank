@@ -163,3 +163,30 @@ def attempt_records(request):
                 totalAttempts = attempts, correctAttempts = correct, course = course)
                 attempt_data.save()
                 return HttpResponse(status=204)
+    elif request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("course") is not None:
+            user = request.user
+            course_id = int(data["course"])
+
+            course = Course.objects.get(id=course_id)
+            try:
+                checkAttempts = Attempted.objects.filter(course = course)
+                total_attempts = 0
+                total_correct = 0
+
+                for attempt in checkAttempts:
+                    total_attempts = total_attempts + attempt.totalAttempts
+                    total_correct = total_correct + attempt.correctAttempts
+                if total_attempts > 0:
+                    pass_percentage = round((total_correct/total_attempts) * 100, 2)
+                    return JsonResponse({"Total Attempts": total_attempts,
+                                        "Total Correct": total_correct,
+                                        "Pass Percentage": pass_percentage,
+                                        "Course ID": course_id})
+                elif total_attempts == 0:
+                    return JsonResponse({"error": "No Attempts Yet",
+                                        "Course ID": course_id})
+
+            except Attempted.DoesNotExist:
+                return JsonResponse({"error": "No Attempts Yet"})
