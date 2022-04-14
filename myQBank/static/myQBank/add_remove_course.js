@@ -12,7 +12,7 @@ function add_course() {
 
 
 
-        fetch(`http://127.0.0.1:8000/addCourse/${courseID}`)
+        fetch(`/addCourse/${courseID}`)
         .then(response => response.json())
         .then(taken => {
             check_course = taken['taking']
@@ -24,7 +24,7 @@ function add_course() {
 
         var inputCourseID = course.getAttribute('name')
         course.addEventListener('click', () => {
-            fetch(`http://127.0.0.1:8000/addCourse/${courseID}`, {
+            fetch(`/addCourse/${courseID}`, {
                 method: 'POST',
                 body: JSON.stringify({
                     courseID: inputCourseID

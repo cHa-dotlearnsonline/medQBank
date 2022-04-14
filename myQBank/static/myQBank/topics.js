@@ -7,7 +7,7 @@ function allowAttempt() {
     var courseID = parseInt(attempt_button_id)
     var attemptedQuestionsList = []
     var allready_attempted = {}
-    fetch(`http://127.0.0.1:8000/addCourse/${courseID}`)
+    fetch(`/addCourse/${courseID}`)
         .then(response => response.json())
         .then(taken => {
             check_course = taken['taking']
@@ -67,7 +67,7 @@ function allowAttempt() {
                             if (allready_attempted[`${question}`] === undefined || allready_attempted[`${question}`] !== attempts) {
                                 allready_attempted[`${question}`] = attempts
                                 console.log(`Correct Clicks: ${correct},\nQuestion ID: ${question_id},\nTotal Attempts: ${attempts},\nCourse: ${course},\nTopic: ${topic}\n`)
-                                fetch('http://127.0.0.1:8000/attempts', {
+                                fetch('/attempts', {
                                     method: 'POST',
                                     body: JSON.stringify({
                                         question: question_id,

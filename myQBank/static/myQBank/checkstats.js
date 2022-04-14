@@ -6,7 +6,7 @@ function checkStats() {
     statsButton.forEach(button => {
         button.addEventListener('click', () => {
             course_id = parseInt(button.dataset["course"])
-            fetch('http://127.0.0.1:8000/attempts', {
+            fetch('/attempts', {
                 method: 'PUT',
                 body: JSON.stringify({
                     course: course_id
