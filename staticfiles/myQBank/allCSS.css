@@ -1,0 +1,8 @@
+.card-image {
+    height: 30vw;
+    object-fit: cover;
+}
+.form-center {
+    text-align: center;
+}
+/* this hasn't worked so well i will fix it tomorrow*/
