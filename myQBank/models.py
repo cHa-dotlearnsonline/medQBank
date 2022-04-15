@@ -29,6 +29,8 @@ class Question(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     # reference the topic under which the question is
     topic = models.ForeignKey(Topic, on_delete = models.CASCADE)
+    # mark if the question has been answred or not
+    is_answered = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.question}"
