@@ -190,3 +190,7 @@ def attempt_records(request):
 
             except Attempted.DoesNotExist:
                 return JsonResponse({"error": "No Attempts Yet"})
+
+def add_question(request):
+
+    return render(request, 'myQBank/addquestion.html')

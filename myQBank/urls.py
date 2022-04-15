@@ -20,5 +20,7 @@ urlpatterns = [
     path("profile/<str:username>", views.profile_view, name="profile"),
     path("logout", views.logout_view, name="logout"),
     #this part has the path for how I record the attempts of each candidate
-    path("attempts", views.attempt_records, name="attempts")
+    path("attempts", views.attempt_records, name="attempts"),
+    # this part has the path for adding questions by the site's admins
+    path("addQuestions", views.add_question, name="addQuestions")
 ]

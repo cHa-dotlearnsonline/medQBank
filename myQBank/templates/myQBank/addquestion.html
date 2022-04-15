@@ -1,4 +1,4 @@
-{% extend 'myQBank/layout.html' %}
+{% extends 'myQBank/layout.html' %}
 {% load static %} 
 {% block body %} 
 <!--TODO: Form for adding questions-->
@@ -7,30 +7,29 @@
         <div class="row d-flex justify-content-center">
             <h2 class="col-sm-12">Add Question</h2>
             <div class="col-md-6">
-                <form action="{% url 'addQuestion' %}" method="post">
+                <form action="{% url 'addQuestions' %}" method="post" onsubmit="false">
                     {% csrf_token %}
                     <div class="form-group">
-                        <input class="form-control" type="text" name="question" id="" placeholder="Type Question Here">
-                    </div>
+                        <textarea class="form-control" type="text" name="question" id="" placeholder="Type Question Here" style="height: 8vw"></textarea>                    </div>
                     <div class="form-group">
                         <input type="email" name="option1" class="form-control" placeholder="First Option">
                     </div>
                     <div class="form-group">
-                        <input type="password" name="option2" class="form-control" placeholder="Second Option">
+                        <input type="text" name="option2" class="form-control" placeholder="Second Option">
                     </div>
                     <div class="form-group">
-                        <input type="password" name="option3"  class="form-control" placeholder="Third Option">
+                        <input type="text" name="option3"  class="form-control" placeholder="Third Option">
                     </div>
                     <div class="form-group">
-                        <input type="password" name="option4" class="form-control" placeholder="Fourth Option">
+                        <input type="text" name="option4" class="form-control" placeholder="Fourth Option">
                     </div>
                     <div id="extra-option">
 
                     </div>
                     <div class="form-group">
-                        <input type="submit" value="Sign Up" class="btn btn-primary">
+                        <input type="submit" value="Add Question" class="btn btn-primary">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="display: inline-block">
                         <button id="addOption" class="btn btn-outline">Add Option</button>
                     </div>
 
