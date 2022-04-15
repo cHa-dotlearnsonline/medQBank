@@ -10,34 +10,41 @@
                 <form action="{% url 'addQuestions' %}" method="post" onsubmit="false">
                     {% csrf_token %}
                     <div class="form-group">
-                        <textarea class="form-control" type="text" name="question" id="" placeholder="Type Question Here" style="height: 8vw"></textarea>                    </div>
-                    <div class="form-group">
-                        <input type="email" name="option1" class="form-control" placeholder="First Option">
+                        <textarea class="form-control" type="text" name="question" id="question1" placeholder="Type Question Here" style="height: 10vw"></textarea> 
                     </div>
                     <div class="form-group">
-                        <input type="text" name="option2" class="form-control" placeholder="Second Option">
+                        <input id="option1" type="text" name="option1" class="form-control" placeholder="First Option">
+                        <input id="correct1" class="form-check-input" type="checkbox" name="correct1" value="True">
+                        <label  for="correct1">Marks as Correct</label>
                     </div>
                     <div class="form-group">
-                        <input type="text" name="option3"  class="form-control" placeholder="Third Option">
+                        <input id="option2" type="text" name="option2" class="form-control" placeholder="Second Option">
+                        <input id="correct2" class="form-check-input" type="checkbox" name="correct2" value="True">
+                        <label for="correct2">Marks as Correct</label>
                     </div>
                     <div class="form-group">
-                        <input type="text" name="option4" class="form-control" placeholder="Fourth Option">
+                        <input id="option3" type="text" name="option3"  class="form-control" placeholder="Third Option">
+                        <input id="correct3"class="form-check-input" type="checkbox" name="correct3" value="True">
+                        <label  for="correct3">Marks as Correct</label>
+                    </div>
+                    <div class="form-group">
+                        <input id="option4" type="text" name="option4" class="form-control" placeholder="Fourth Option">
+                        <input id="correct4" class="form-check-input" type="checkbox" name="correct4" value="True">
+                        <label  for="correct4">Marks as Correct</label>
                     </div>
                     <div id="extra-option">
 
                     </div>
                     <div class="form-group">
-                        <input type="submit" value="Add Question" class="btn btn-primary">
-                    </div>
-                    <div class="form-group" style="display: inline-block">
+                        <input type="submit" value="Save" class="btn btn-primary" >
                         <button id="addOption" class="btn btn-outline">Add Option</button>
                     </div>
 
                 </form>
-                Alreay have an account? <a href="{% url 'login' %}">Login</a> here
             </div>
         </div>
     </div>
 </section>
 <!--TODO: javascript for sending-->
+<script src="{% static 'myQBank/add_questions.js' %}"></script>
 {% endblock %}

@@ -120,9 +120,10 @@ def add_course(request, courseName):
 
     elif request.method == "GET":
         # add for checking if the user already has the course added
+        user = user= request.user
         course_taken = Course.objects.get(id = courseName)
         try:
-            check_add = Userscourses.objects.get(course = course_taken)
+            check_add = Userscourses.objects.get(course = course_taken, user = user)
             return JsonResponse({"taking":True})
         except Userscourses.DoesNotExist:
             return JsonResponse({"taking":False})
@@ -153,7 +154,7 @@ def attempt_records(request):
             course = Course.objects.get(course_name = course)
             # enter the data collected
             try:
-                second_attempt = Attempted.objects.get(question = question)
+                second_attempt = Attempted.objects.get(question = question, user= user)
                 second_attempt.totalAttempts = second_attempt.totalAttempts + attempts
                 second_attempt.correctAttempts = second_attempt.correctAttempts + correct
                 second_attempt.save()
@@ -165,13 +166,14 @@ def attempt_records(request):
                 return HttpResponse(status=204)
     elif request.method == "PUT":
         data = json.loads(request.body)
+        user = request.user
         if data.get("course") is not None:
             user = request.user
             course_id = int(data["course"])
 
             course = Course.objects.get(id=course_id)
             try:
-                checkAttempts = Attempted.objects.filter(course = course)
+                checkAttempts = Attempted.objects.filter(course = course, user = user)
                 total_attempts = 0
                 total_correct = 0
 
