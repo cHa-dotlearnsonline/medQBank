@@ -6,45 +6,52 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from .models import Attempted, User, Course, Topic, Answer, Question, Userscourses
 # Create your views here.
+
+
 def index(request):
     # here I will just query for all the courses in my database
     all_courses = Course.objects.all()
-    return render (request, "myQBank/index.html", {
+    return render(request, "myQBank/index.html", {
         "courses": all_courses
     })
 # here I render view for seeing all the topics under a course
+
+
 def course_view(request, course):
-    #use the get method to only get one result
-    desired_course = Course.objects.get(course_name = course)
-    course_topics = Topic.objects.filter(course = desired_course)
+    # use the get method to only get one result
+    desired_course = Course.objects.get(course_name=course)
+    course_topics = Topic.objects.filter(course=desired_course)
     if len(course_topics) >= 1:
-        return render (request, "myQBank/topics.html", {
+        return render(request, "myQBank/topics.html", {
             "Topics": course_topics
-            })
-    else:
-        return render (request, "myQBank/topics.html",{
-            "message": "No questions or Topics Yet"    
         })
-    
+    else:
+        return render(request, "myQBank/topics.html", {
+            "message": "No questions or Topics Yet"
+        })
+
 # in this view I only aim to produce those questions
 # and answers in with that topic
+
+
 def questions_view(request, topic_id):
-    #an empty list that I will use to append the query set for all 
+    # an empty list that I will use to append the query set for all
     # the answers for each question
     all_answers = []
-    #get the topic with the corresponding topic_id
+    # get the topic with the corresponding topic_id
     get_topic = Topic.objects.get(id=topic_id)
-    #get the queryset of all the questions under/with this topic
-    get_questions = Question.objects.filter(topic = get_topic)
+    # get the queryset of all the questions under/with this topic
+    get_questions = Question.objects.filter(topic=get_topic)
     # create a for loop that gets the answers for each particular question
     for question in get_questions:
-        #this creates a queryset with all the answers for each question
-        get_answers = Answer.objects.filter(question = question)
-        #Add the resulting queryset to all_answers list
+        # this creates a queryset with all the answers for each question
+        get_answers = Answer.objects.filter(question=question)
+        # Add the resulting queryset to all_answers list
         all_answers.append(get_answers)
-    return render (request, "myQBank/topics.html", {
-        "all_questions" : all_answers
-        })
+    return render(request, "myQBank/topics.html", {
+        "all_questions": all_answers
+    })
+
 
 def login_view(request):
     # the login process here
@@ -52,7 +59,7 @@ def login_view(request):
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
-        
+
         if user is not None:
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
@@ -63,11 +70,15 @@ def login_view(request):
     return render(request, "myQBank/login.html")
 
 # We are logging out people here
+
+
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
 # The Register view will be here
+
+
 def register_view(request):
     # copy some code for the registration process
 
@@ -95,8 +106,10 @@ def register_view(request):
         return render(request, "myQBank/register.html")
 
 # remember to migrate the database
+
+
 def add_course(request, courseName):
-    
+
     # check if the request method is post
     if request.method == "POST":
         # get the value of the course ID
@@ -109,36 +122,39 @@ def add_course(request, courseName):
             # grab that course from the database
             course = Course.objects.get(id=course_id)
             try:
-                check_addition = Userscourses.objects.get(course = course, user=user)
+                check_addition = Userscourses.objects.get(
+                    course=course, user=user)
                 check_addition.delete()
                 return HttpResponse(status=204)
             except Userscourses.DoesNotExist:
                 # add the course and user taking the course to users courses
-                chosen_course = Userscourses(course = course, user = user)
+                chosen_course = Userscourses(course=course, user=user)
                 chosen_course.save()
                 return HttpResponse(status=204)
 
     elif request.method == "GET":
         # add for checking if the user already has the course added
-        user = user= request.user
-        course_taken = Course.objects.get(id = courseName)
+        user = user = request.user
+        course_taken = Course.objects.get(id=courseName)
         try:
-            check_add = Userscourses.objects.get(course = course_taken, user = user)
-            return JsonResponse({"taking":True})
+            check_add = Userscourses.objects.get(
+                course=course_taken, user=user)
+            return JsonResponse({"taking": True})
         except Userscourses.DoesNotExist:
-            return JsonResponse({"taking":False})
+            return JsonResponse({"taking": False})
+
 
 def profile_view(request, username):
     # get the courses that the user has subscribed to
     user = User.objects.get(username=username)
-    all_user_courses = Userscourses.objects.filter(user = user)
+    all_user_courses = Userscourses.objects.filter(user=user)
     return render(request, 'myQBank/profile.html', {
         "UsersCourses": all_user_courses
     })
 
 
 def attempt_records(request):
-    # add the logic here that unpacks the information that will be 
+    # add the logic here that unpacks the information that will be
     # sent to me from the client side
     if request.method == "POST":
         data = json.loads(request.body)
@@ -150,18 +166,19 @@ def attempt_records(request):
             course = data["course"]
             topic = data["topic"]
 
-            question = Question.objects.get(id = question_id)
-            course = Course.objects.get(course_name = course)
+            question = Question.objects.get(id=question_id)
+            course = Course.objects.get(course_name=course)
             # enter the data collected
             try:
-                second_attempt = Attempted.objects.get(question = question, user= user)
+                second_attempt = Attempted.objects.get(
+                    question=question, user=user)
                 second_attempt.totalAttempts = second_attempt.totalAttempts + attempts
                 second_attempt.correctAttempts = second_attempt.correctAttempts + correct
                 second_attempt.save()
                 return HttpResponse(status=204)
             except Attempted.DoesNotExist:
-                attempt_data = Attempted(question = question, user = user,
-                totalAttempts = attempts, correctAttempts = correct, course = course)
+                attempt_data = Attempted(question=question, user=user,
+                                         totalAttempts=attempts, correctAttempts=correct, course=course)
                 attempt_data.save()
                 return HttpResponse(status=204)
     elif request.method == "PUT":
@@ -173,7 +190,8 @@ def attempt_records(request):
 
             course = Course.objects.get(id=course_id)
             try:
-                checkAttempts = Attempted.objects.filter(course = course, user = user)
+                checkAttempts = Attempted.objects.filter(
+                    course=course, user=user)
                 total_attempts = 0
                 total_correct = 0
 
@@ -181,17 +199,19 @@ def attempt_records(request):
                     total_attempts = total_attempts + attempt.totalAttempts
                     total_correct = total_correct + attempt.correctAttempts
                 if total_attempts > 0:
-                    pass_percentage = round((total_correct/total_attempts) * 100, 2)
+                    pass_percentage = round(
+                        (total_correct/total_attempts) * 100, 2)
                     return JsonResponse({"Total Attempts": total_attempts,
                                         "Total Correct": total_correct,
-                                        "Pass Percentage": pass_percentage,
-                                        "Course ID": course_id})
+                                         "Pass Percentage": pass_percentage,
+                                         "Course ID": course_id})
                 elif total_attempts == 0:
                     return JsonResponse({"error": "No Attempts Yet",
                                         "Course ID": course_id})
 
             except Attempted.DoesNotExist:
                 return JsonResponse({"error": "No Attempts Yet"})
+
 
 def add_question(request):
 
@@ -205,24 +225,28 @@ def add_question(request):
             courseImage = data["courseImage"]
             theOptions = data["theOptions"]
             try:
-                set_course = Course.objects.get(course_name__iexact = course)
+                set_course = Course.objects.get(course_name__iexact=course)
             except Course.DoesNotExist:
-                set_course = Course(course_name = course.lower().capitalize(), image_url =courseImage)
+                set_course = Course(
+                    course_name=course.lower().capitalize(), image_url=courseImage, typical_year = 0)
                 set_course.save()
-                set_course = Course.objects.get(course_name__iexact = course)
+                set_course = Course.objects.get(course_name__iexact=course)
             try:
-                set_topic = Topic.objects.get(topic_name__iexact = topic)
+                set_topic = Topic.objects.get(topic_name__iexact=topic)
             except Topic.DoesNotExist:
-                set_topic = Topic(topic_name = topic, course = set_course)
+                set_topic = Topic(topic_name=topic, course=set_course)
                 set_topic.save()
-                set_topic = Topic.objects.get(topic_name__iexact = topic)
-            set_question = Question(question=question, course=set_course, topic=set_topic)
+                set_topic = Topic.objects.get(topic_name__iexact=topic)
+            set_question = Question(
+                question=question, course=set_course, topic=set_topic)
             set_question.save()
+
             for answer in theOptions:
                 for option, correctness in answer.items():
                     if correctness:
                         set_question.is_answered = True
-                    set_answer = Answer(option=option, correctness=correctness, question=set_question)
+                    set_answer = Answer(
+                        option=option, correctness=correctness, question=set_question)
                     set_answer.save()
         return HttpResponse(status=204)
 
