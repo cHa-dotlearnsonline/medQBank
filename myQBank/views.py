@@ -209,11 +209,13 @@ def add_question(request):
             except Course.DoesNotExist:
                 set_course = Course(course_name = course.lower().capitalize(), image_url =courseImage)
                 set_course.save()
+                set_course = Course.objects.get(course_name__iexact = course)
             try:
                 set_topic = Topic.objects.get(topic_name__iexact = topic)
             except Topic.DoesNotExist:
                 set_topic = Topic(topic_name = topic, course = set_course)
                 set_topic.save()
+                set_topic = Topic.objects.get(topic_name__iexact = topic)
             set_question = Question(question=question, course=set_course, topic=set_topic)
             set_question.save()
             for answer in theOptions:
