@@ -1,3 +1,4 @@
+from curses.ascii import HT
 import json
 from django.shortcuts import render
 from django.db import DataError, IntegrityError
@@ -194,5 +195,34 @@ def attempt_records(request):
                 return JsonResponse({"error": "No Attempts Yet"})
 
 def add_question(request):
+
+    if request.method == "POST":
+        data = json.loads(request.body)
+        user = request.user
+        if data.get("question") is not None:
+            question = data["question"]
+            course = data["course"]
+            topic = data["topic"]
+            courseImage = data["courseImage"]
+            theOptions = data["theOptions"]
+            try:
+                set_course = Course.objects.get(course_name__iexact = course)
+            except Course.DoesNotExist:
+                set_course = Course(course_name = course.lower().capitalize(), image_url =courseImage)
+                set_course.save()
+            try:
+                set_topic = Topic.objects.get(topic_name__iexact = topic)
+            except Topic.DoesNotExist:
+                set_topic = Topic(topic_name = topic, course = set_course)
+                set_topic.save()
+            set_question = Question(question=question, course=set_course, topic=set_topic)
+            set_question.save()
+            for answer in theOptions:
+                for option, correctness in answer.items():
+                    if correctness:
+                        set_question.is_answered = True
+                    set_answer = Answer(option=option, correctness=correctness, question=set_question)
+                    set_answer.save()
+        return HttpResponse(status=204)
 
     return render(request, 'myQBank/addquestion.html')
