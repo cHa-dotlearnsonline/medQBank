@@ -27,15 +27,18 @@
                 data-id="{{all_questions.0.0.question.course.id}}">Attempt</button>
             <div id="messenger"></div>
             {% for question_set in all_questions %}
-            <p id="question{{question_set.0.question.id}}" data-attempts="0"
+            <strong  id="question{{question_set.0.question.id}}" data-attempts="0"
                 data-course="{{question_set.0.question.course.course_name}}"
                 data-topic="{{question_set.0.question.topic.topic_name}}"
                 data-questionid="{{question_set.0.question.id}}">{{forloop.counter}}.
-                {{question_set.0.question}}</p>
+                {{question_set.0.question}}</strong>
+                <ol type="a">
             {% for option in question_set %}
             <li class="answer" data-correctness="{{option.correctness}}" data-clicked="0"
-                data-questionid="{{option.question.id}}"> {{ option.option }}</li>
+                data-questionid="{{option.question.id}}"> {{ option.option }}
+            </li>
             {% endfor %}
+        </ol>
             <br>
             {% endfor %}
 
