@@ -18,28 +18,37 @@
     {% endif %}
 </ul>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-12">
+    <div class="row d-flex justify-content-center">
 
-            {% if user.is_authenticated %}
-            {% if all_questions %}
+
+        {% if user.is_authenticated %}
+        {% if all_questions %}
+        
+        
+      
+        <div class="col-sm-12  col-md-6 margin-giver">
+            <div class="p-1">
             <button class="btn btn-secondary" id="attemptButton"
-                data-id="{{all_questions.0.0.question.course.id}}">Attempt</button>
+            data-id="{{all_questions.0.0.question.course.id}}">Attempt</button>
+        </div>
             <div id="messenger"></div>
             {% for question_set in all_questions %}
-            <strong  id="question{{question_set.0.question.id}}" data-attempts="0"
+            <div class="p-2">
+            <div class="card  p-3">
+            <strong id="question{{question_set.0.question.id}}" data-attempts="0"
                 data-course="{{question_set.0.question.course.course_name}}"
                 data-topic="{{question_set.0.question.topic.topic_name}}"
                 data-questionid="{{question_set.0.question.id}}">{{forloop.counter}}.
                 {{question_set.0.question}}</strong>
-                <ol type="a">
-            {% for option in question_set %}
-            <li class="answer" data-correctness="{{option.correctness}}" data-clicked="0"
-                data-questionid="{{option.question.id}}"> {{ option.option }}
-            </li>
-            {% endfor %}
-        </ol>
-            <br>
+            <ol type="a">
+                {% for option in question_set %}
+                <li class="answer" data-correctness="{{option.correctness}}" data-clicked="0"
+                    data-questionid="{{option.question.id}}"> {{ option.option }}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+        </div>
             {% endfor %}
 
             {% endif %}
