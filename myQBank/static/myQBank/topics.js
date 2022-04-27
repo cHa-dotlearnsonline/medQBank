@@ -16,6 +16,8 @@ function allowAttempt() {
                 attempt_button.addEventListener('click', () => {
                     if (attempt_button.innerHTML === "Attempt") {
                         attempt_button.innerHTML = "Stop Attempt"
+                        attempt_button.classList.add("btn-success")
+                        attempt_button.classList.remove("btn-secondary")
                         answer_set = document.querySelectorAll(".answer")
                         answer_set.forEach(answer => {
                             var clickedness = answer.dataset.clicked
@@ -82,6 +84,8 @@ function allowAttempt() {
                             }
                         })
                         attempt_button.innerHTML = "Attempt"
+                        attempt_button.classList.add("btn-secondary")
+                        attempt_button.classList.remove("btn-success")
                     }
 
                 })
