@@ -9,3 +9,11 @@
 .margin-giver {
     margin: 1rem;
 }
+.correct-answer {
+    color: green;
+    font-weight: bold;
+}
+.wrong-answer {
+    color: red;
+    font-weight: bold;
+}

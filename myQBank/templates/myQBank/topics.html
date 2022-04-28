@@ -36,17 +36,20 @@
             <div class="p-2">
             <div class="card  p-3">
             <strong id="question{{question_set.0.question.id}}" data-attempts="0"
+                data-clicked="0"
                 data-course="{{question_set.0.question.course.course_name}}"
                 data-topic="{{question_set.0.question.topic.topic_name}}"
                 data-questionid="{{question_set.0.question.id}}">{{forloop.counter}}.
                 {{question_set.0.question}}</strong>
             <ol type="a">
                 {% for option in question_set %}
-                <li class="answer" data-correctness="{{option.correctness}}" data-clicked="0"
+                <li class="answer answer{{question_set.0.question.id}}" data-correctness="{{option.correctness}}" data-clicked="0"
                     data-questionid="{{option.question.id}}"> {{ option.option }}
                 </li>
                 {% endfor %}
             </ol>
+            <div id="correct-answer{{question_set.0.question.id}}" class="correct-answer"><i class="fi fi-bs-check"></i></div>
+            <div id="wrong-answer{{question_set.0.question.id}}" class="wrong-answer"><i class="fi fi-br-cross"></i></div>
         </div>
         </div>
             {% endfor %}
