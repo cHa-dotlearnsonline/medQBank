@@ -82,7 +82,7 @@ function allowAttempt() {
                                     mode: 'same-origin'
                                 })
                             }
-                        })
+                        })                                                                                                                              
                         attempt_button.innerHTML = "Attempt"
                         attempt_button.classList.add("btn-secondary")
                         attempt_button.classList.remove("btn-success")
