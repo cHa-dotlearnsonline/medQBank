@@ -1,5 +1,6 @@
 import json
 from django.shortcuts import render
+from django.core.paginator import Paginator
 from django.db import DataError, IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
@@ -48,8 +49,12 @@ def questions_view(request, topic_id):
         get_answers = Answer.objects.filter(question=question)
         # Add the resulting queryset to all_answers list
         all_answers.append(get_answers)
+    paginator = Paginator(all_answers, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(request, "myQBank/topics.html", {
-        "all_questions": all_answers
+        #all_questions": all_answers,
+        "all_questions": page_obj
     })
 
 
