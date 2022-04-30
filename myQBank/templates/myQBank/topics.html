@@ -54,11 +54,11 @@
         </div>
             {% endfor %}
             <nav aria-label="Page navigation example">
-            <div class="pagination pagination-sm">
-                <span class="step-links">
+            <ul class="pagination pagination-sm">
+                <!-- <span class="step-links"> -->
                     {% if all_questions.has_previous %}
-                        <i class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></i>
-                        <i class="page-item"><a class="page-link" href="?page={{ all_questions.previous_page_number }}">previous</a></i>
+                        <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ all_questions.previous_page_number }}">previous</a></li>
                     {% endif %}
             
                     <span class="current">
@@ -66,11 +66,11 @@
                     </span>
             
                     {% if all_questions.has_next %}
-                        <i class="page-item"><a class="page-link" href="?page={{ all_questions.next_page_number }}">next</a></i>
-                        <i class="page-item"><a class="page-link" href="?page={{ all_questions.paginator.num_pages }}">last &raquo;</a></i>
+                        <li class="page-item"><a class="page-link" href="?page={{ all_questions.next_page_number }}">next</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ all_questions.paginator.num_pages }}">last &raquo;</a></li>
                     {% endif %}
-                </span>
-            </div>
+                <!-- </span> -->
+            </ul>
         </nav>
             {% endif %}
 
