@@ -1,4 +1,5 @@
 import json
+from django.template.defaulttags import register
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.db import DataError, IntegrityError
@@ -6,18 +7,16 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from .models import Attempted, User, Course, Topic, Answer, Question, Userscourses
+
 # Create your views here.
-
-
 def index(request):
     # here I will just query for all the courses in my database
     all_courses = Course.objects.all()
     return render(request, "myQBank/index.html", {
         "courses": all_courses
     })
+
 # here I render view for seeing all the topics under a course
-
-
 def course_view(request, course):
     # use the get method to only get one result
     desired_course = Course.objects.get(course_name=course)
@@ -33,8 +32,6 @@ def course_view(request, course):
 
 # in this view I only aim to produce those questions
 # and answers in with that topic
-
-
 def questions_view(request, topic_id):
     # an empty list that I will use to append the query set for all
     # the answers for each question
@@ -57,7 +54,6 @@ def questions_view(request, topic_id):
         "all_questions": page_obj
     })
 
-
 def login_view(request):
     # the login process here
     if request.method == "POST":
@@ -75,15 +71,11 @@ def login_view(request):
     return render(request, "myQBank/login.html")
 
 # We are logging out people here
-
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
 # The Register view will be here
-
-
 def register_view(request):
     # copy some code for the registration process
 
@@ -110,11 +102,7 @@ def register_view(request):
     else:
         return render(request, "myQBank/register.html")
 
-# remember to migrate the database
-
-
 def add_course(request, courseName):
-
     # check if the request method is post
     if request.method == "POST":
         # get the value of the course ID
@@ -148,7 +136,6 @@ def add_course(request, courseName):
         except Userscourses.DoesNotExist:
             return JsonResponse({"taking": False})
 
-
 def profile_view(request, username):
     # get the courses that the user has subscribed to
     user = User.objects.get(username=username)
@@ -156,7 +143,6 @@ def profile_view(request, username):
     return render(request, 'myQBank/profile.html', {
         "UsersCourses": all_user_courses
     })
-
 
 def attempt_records(request):
     # add the logic here that unpacks the information that will be
@@ -174,6 +160,7 @@ def attempt_records(request):
             question = Question.objects.get(id=question_id)
             course = Course.objects.get(course_name=course)
             # enter the data collected
+            topic  = Topic.objects.get(topic_name = topic, course = course)
             try:
                 second_attempt = Attempted.objects.get(
                     question=question, user=user)
@@ -183,7 +170,7 @@ def attempt_records(request):
                 return HttpResponse(status=204)
             except Attempted.DoesNotExist:
                 attempt_data = Attempted(question=question, user=user,
-                                         totalAttempts=attempts, correctAttempts=correct, course=course)
+                                         totalAttempts=attempts, correctAttempts=correct, course=course, topic=topic)
                 attempt_data.save()
                 return HttpResponse(status=204)
     elif request.method == "PUT":
@@ -217,9 +204,7 @@ def attempt_records(request):
             except Attempted.DoesNotExist:
                 return JsonResponse({"error": "No Attempts Yet"})
 
-
 def add_question(request):
-
     if request.method == "POST":
         data = json.loads(request.body)
         user = request.user
@@ -245,7 +230,6 @@ def add_question(request):
             set_question = Question(
                 question=question, course=set_course, topic=set_topic)
             set_question.save()
-
             for answer in theOptions:
                 for option, correctness in answer.items():
                     if correctness:
@@ -254,5 +238,33 @@ def add_question(request):
                         option=option, correctness=correctness, question=set_question)
                     set_answer.save()
         return HttpResponse(status=204)
-
     return render(request, 'myQBank/addquestion.html')
+
+def statistics(request, user_course_id):
+    # Get statistics for user
+    user=request.user
+    my_attempts = {}
+    #TODO: get course taken by user
+    course = Course.objects.get(id=user_course_id)
+    #TODO: get attempts under said course
+    all_attempts = Attempted.objects.filter(user=user, course=course)
+    #TODO: Get total number of attempts per topic
+    for attempt in all_attempts:
+        if attempt.topic not in my_attempts.keys():
+            my_attempts[attempt.topic] = {"Total":attempt.totalAttempts,
+            "Correct": attempt.correctAttempts}
+        else:
+            my_attempts[attempt.topic]["Total"] = my_attempts[attempt.topic]["Total"] + attempt.totalAttempts
+            my_attempts[attempt.topic]["Correct"] = my_attempts[attempt.topic]["Correct"] + attempt.correctAttempts
+            my_attempts[attempt.topic]["Pass"] = round((my_attempts[attempt.topic]["Correct"]/my_attempts[attempt.topic]["Total"]) * 100, 2)
+    #TODO: get all the topics put them in a list then 
+    attempted_topics = my_attempts.keys()
+    return render(request, "myQBank/statistics.html", {
+        "topics": attempted_topics,
+        "topicStats": my_attempts
+    })
+    
+@register.filter
+def get_value(dictionary, key):
+    dictionary1 = dictionary.get(key)
+    return f'Total attempts:{dictionary1["Total"]}, Total Correct:{dictionary1["Correct"]}, Pass Percentage: {dictionary1["Pass"]}%'

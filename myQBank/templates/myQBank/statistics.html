@@ -1,0 +1,16 @@
+{% extends "myQBank/layout.html" %}
+{% block body %}
+<ol type="1">
+    {% for topic in topics %}
+    <li>
+        <h4>{{topic}}</h4>
+        <ol type="a">
+            <!-- this doesn't work find a way to make it work on another day -->
+            {% if topicStats %}
+            <li>{{ topicStats|get_value:topic }}</li>
+            {% endif %}
+        </ol>
+    </li>
+    {%endfor%}
+</0l>
+{% endblock %}

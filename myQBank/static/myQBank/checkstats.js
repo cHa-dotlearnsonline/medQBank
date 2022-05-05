@@ -4,6 +4,9 @@ function checkStats() {
     const csrftoken = getCookie('csrftoken')
     statsButton = document.querySelectorAll(".subjectStats")
     statsButton.forEach(button => {
+        var course_id = parseInt(button.dataset["course"])
+        let viewStats = document.querySelector(`#display-stats${course_id}`)
+        viewStats.style.display = "none"
         button.addEventListener('click', () => {
             var course_id = parseInt(button.dataset["course"])
             
@@ -33,7 +36,7 @@ function checkStats() {
                     var pass_percentage  = `Pass Percentage: ${stats["Pass Percentage"]}%`
                     var courseID = parseInt(stats["Course ID"])
                     console.log(`${total_attempts}\n${total_correct}\n${pass_percentage}%`) 
-                    viewStats.innerHTML = total_attempts + total_correct + pass_percentage
+                    viewStats.insertAdjacentHTML("afterbegin",`${total_attempts + total_correct + pass_percentage}`) 
                     viewStats.style.display = "block"
                     viewStats.dataset["show"] = 1
                 }

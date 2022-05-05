@@ -51,7 +51,7 @@
                             name="{{subject.course.id}}">Add</button>
                         <button class="subjectStats btn btn-sm btn-outline-primary"
                             data-course="{{subject.course.id}}">Your Stats</button>
-                            <div id="display-stats{{subject.course.id}}" data-show = "0"></div>
+                            <div id="display-stats{{subject.course.id}}" data-show = "0"><a href="{% url 'statistics' subject.course.id %}">Details&raquo;</a></div>
                         {% endif %}
                     </div>
                 </div>
