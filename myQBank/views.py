@@ -143,7 +143,7 @@ def profile_view(request, username):
     return render(request, 'myQBank/profile.html', {
         "UsersCourses": all_user_courses
     })
-
+#the view for recording attempts
 def attempt_records(request):
     # add the logic here that unpacks the information that will be
     # sent to me from the client side
