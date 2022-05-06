@@ -35,8 +35,11 @@ function checkStats() {
                     var total_correct  = `Total Correct: ${stats["Total Correct"]}<br>`
                     var pass_percentage  = `Pass Percentage: ${stats["Pass Percentage"]}%`
                     var courseID = parseInt(stats["Course ID"])
-                    console.log(`${total_attempts}\n${total_correct}\n${pass_percentage}%`) 
-                    viewStats.insertAdjacentHTML("afterbegin",`${total_attempts + total_correct + pass_percentage}`) 
+                    console.log(`${total_attempts}\n${total_correct}\n${pass_percentage}%`)
+                    if (parseInt(viewStats.dataset["populate"]) === 0){
+                        viewStats.insertAdjacentHTML("afterbegin",`${total_attempts + total_correct + pass_percentage}`)
+                        viewStats.dataset["populate"] = 1
+                    }
                     viewStats.style.display = "block"
                     viewStats.dataset["show"] = 1
                 }

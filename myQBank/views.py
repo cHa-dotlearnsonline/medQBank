@@ -6,7 +6,7 @@ from django.db import DataError, IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from .models import Attempted, User, Course, Topic, Answer, Question, Userscourses
+from .models import Attempted, User, Course, Topic, Answer, Question, Userscourses, Attempt
 
 # Create your views here.
 def index(request):
@@ -162,14 +162,14 @@ def attempt_records(request):
             # enter the data collected
             topic  = Topic.objects.get(topic_name = topic, course = course)
             try:
-                second_attempt = Attempted.objects.get(
+                second_attempt = Attempt.objects.get(
                     question=question, user=user)
                 second_attempt.totalAttempts = second_attempt.totalAttempts + attempts
                 second_attempt.correctAttempts = second_attempt.correctAttempts + correct
                 second_attempt.save()
                 return HttpResponse(status=204)
-            except Attempted.DoesNotExist:
-                attempt_data = Attempted(question=question, user=user,
+            except Attempt.DoesNotExist:
+                attempt_data = Attempt(question=question, user=user,
                                          totalAttempts=attempts, correctAttempts=correct, course=course, topic=topic)
                 attempt_data.save()
                 return HttpResponse(status=204)
@@ -182,7 +182,7 @@ def attempt_records(request):
 
             course = Course.objects.get(id=course_id)
             try:
-                checkAttempts = Attempted.objects.filter(
+                checkAttempts = Attempt.objects.filter(
                     course=course, user=user)
                 total_attempts = 0
                 total_correct = 0
@@ -201,7 +201,7 @@ def attempt_records(request):
                     return JsonResponse({"error": "No Attempts Yet",
                                         "Course ID": course_id})
 
-            except Attempted.DoesNotExist:
+            except Attempt.DoesNotExist:
                 return JsonResponse({"error": "No Attempts Yet"})
 
 def add_question(request):
@@ -247,7 +247,7 @@ def statistics(request, user_course_id):
     #TODO: get course taken by user
     course = Course.objects.get(id=user_course_id)
     #TODO: get attempts under said course
-    all_attempts = Attempted.objects.filter(user=user, course=course)
+    all_attempts = Attempt.objects.filter(user=user, course=course)
     #TODO: Get total number of attempts per topic
     for attempt in all_attempts:
         if attempt.topic not in my_attempts.keys():
@@ -263,7 +263,6 @@ def statistics(request, user_course_id):
         "topics": attempted_topics,
         "topicStats": my_attempts
     })
-    
 @register.filter
 def get_value(dictionary, key):
     dictionary1 = dictionary.get(key)
