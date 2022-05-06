@@ -60,7 +60,6 @@ class Attempted(models.Model):
     correctAttempts = models.IntegerField(default=0)
     #reference the course that this whole attempt was for
     course = models.ForeignKey(Course, default=None, on_delete=models.CASCADE)
-    topic = models.ForeignKey(Topic, on_delete = models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f"totalAttempts: {self.totalAttempts}, correctAttempts: {self.correctAttempts}, user:{self.user}, question:{self.question}, course:{self.course}"
@@ -76,6 +75,33 @@ class Attempted(models.Model):
             "topic": self.topic
         }
 
+class Attempt(models.Model):
+    # reference the question being attempted
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    #reference the user who made the attempt
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    #write the total number of attempts
+    totalAttempts = models.IntegerField(default=0)
+    # write number of correct attempts
+    correctAttempts = models.IntegerField(default=0)
+    #reference the course that this whole attempt was for
+    course = models.ForeignKey(Course, default=None, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, on_delete = models.CASCADE, null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"totalAttempts: {self.totalAttempts}, correctAttempts: {self.correctAttempts}, user:{self.user}, question:{self.question}, course:{self.course}"
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "question": self.question,
+            "user": self.user,
+            "Attempts": self.totalAttempts,
+            "correct": self.correctAttempts,
+            "course": self.course,
+            "topic": self.topic
+        }
 # create a model that takes note oh how many grand attempts they have made
 # in this case a grand session means how many topics have all the topics
 # completely studied and the questions completed
