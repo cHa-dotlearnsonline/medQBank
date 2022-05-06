@@ -265,5 +265,5 @@ def statistics(request, user_course_id):
     })
 @register.filter
 def get_value(dictionary, key):
-    dictionary1 = dictionary.get(key)
+    dictionary1 = dictionary[key]
     return f'Total attempts:{dictionary1["Total"]}, Total Correct:{dictionary1["Correct"]}, Pass Percentage: {dictionary1["Pass"]}%'
