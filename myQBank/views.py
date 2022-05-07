@@ -252,7 +252,7 @@ def statistics(request, user_course_id):
     for attempt in all_attempts:
         if attempt.topic not in my_attempts.keys():
             my_attempts[attempt.topic] = {"Total":attempt.totalAttempts,
-            "Correct": attempt.correctAttempts}
+            "Correct": attempt.correctAttempts, "Pass":round((attempt.correctAttempts/attempt.totalAttempts)*100,2)}
         else:
             my_attempts[attempt.topic]["Total"] = my_attempts[attempt.topic]["Total"] + attempt.totalAttempts
             my_attempts[attempt.topic]["Correct"] = my_attempts[attempt.topic]["Correct"] + attempt.correctAttempts
@@ -265,5 +265,5 @@ def statistics(request, user_course_id):
     })
 @register.filter
 def get_value(dictionary, key):
-    dictionary1 = dictionary[key]
+    dictionary1 = dictionary.get(key)
     return f'Total attempts:{dictionary1["Total"]}, Total Correct:{dictionary1["Correct"]}, Pass Percentage: {dictionary1["Pass"]}%'
