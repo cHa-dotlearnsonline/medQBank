@@ -263,6 +263,25 @@ def statistics(request, user_course_id):
         "topics": attempted_topics,
         "topicStats": my_attempts
     })
+
+def edit(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        if data.get("question") is not None:
+            question = int(data["question"])
+            optionID = int(data["option"])
+            fullQuestion = Question.objects.get(id=question)
+            associatedOptions = Answer.objects.filter(question=fullQuestion)
+            option = Answer.objects.get(id=optionID)
+            for answer in associatedOptions:
+                if answer == option:
+                    answer.correctness = True
+                    answer.save()
+                else:
+                    answer.correctness = False
+                    answer.save()
+            return HttpResponse(status=204)
+    return HttpResponse("Method Not allowed")
 @register.filter
 def get_value(dictionary, key):
     dictionary1 = dictionary.get(key)

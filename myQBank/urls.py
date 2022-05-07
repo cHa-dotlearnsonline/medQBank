@@ -14,5 +14,6 @@ urlpatterns = [
     path("attempts", views.attempt_records, name="attempts"),
     # this part has the path for adding questions by the site's admins
     path("addQuestions", views.add_question, name="addQuestions"),
-    path("statistics/<int:user_course_id>", views.statistics, name="statistics")
+    path("statistics/<int:user_course_id>", views.statistics, name="statistics"),
+    path("edit", views.edit, name="edit")
 ]

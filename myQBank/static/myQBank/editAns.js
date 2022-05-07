@@ -1,28 +1,52 @@
 Edit()
 
 function Edit() {
+    const csrftoken = getCookie('csrftoken')
     var edit_views = document.querySelectorAll('.change_answer')
     edit_views.forEach(view => {
         view.style.display = 'none'
     })
-   var edit_buttons = document.querySelectorAll('.edit')
-   edit_buttons.forEach(button => {
-       let questionID = parseInt(button.dataset['questionid'])
-       button.addEventListener('click', () => {
-           let editButtonDisplay = document.querySelector(`#edit${questionID}`)
-           editButtonDisplay.style.display = 'none'
-           let edit_boy = document.querySelector(`#change_answer${questionID}`)
-           edit_boy.style.display = 'block'
-           let card_boy = document.querySelector(`#card${questionID}`)
-           card_boy.style.display = 'none'
-           let save_boy = document.querySelector(`#savebutton${questionID}`)
-           save_boy.addEventListener('click', () => {
-               edit_boy.style.display = 'none'
-               card_boy.style.display = 'block'
-               editButtonDisplay.style.display = 'block'
-           })
-       })
-   }) 
+    var edit_buttons = document.querySelectorAll('.edit')
+    edit_buttons.forEach(button => {
+        let questionID = parseInt(button.dataset['questionid'])
+        button.addEventListener('click', () => {
+            let editButtonDisplay = document.querySelector(`#edit${questionID}`)
+            editButtonDisplay.style.display = 'none'
+            let edit_boy = document.querySelector(`#change_answer${questionID}`)
+            edit_boy.style.display = 'block'
+            let card_boy = document.querySelector(`#card${questionID}`)
+            card_boy.style.display = 'none'
+            let save_boy = document.querySelector(`#savebutton${questionID}`)
+            let all_options = document.querySelectorAll(`.option${questionID}`)
+            
+ 
+            save_boy.addEventListener('click', () => {
+                let optionID = ''
+                all_options.forEach(option => {
+                    console.log(option.checked)
+                    console.log(option.value)
+                    if (option.checked === true) {
+                        optionID = option.value
+                    }
+                })
+                edit_boy.style.display = 'none'
+                card_boy.style.display = 'block'
+                editButtonDisplay.style.display = 'block'
+                if (optionID.length > 0) {
+                    console.log(optionID)
+                    fetch('/edit', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            question: questionID,
+                            option: optionID
+                        }),
+                        headers: { 'X-CSRFToken': csrftoken },
+                        mode: 'same-origin'
+                    })
+                }
+            })
+        })
+    })
 }
 
 
