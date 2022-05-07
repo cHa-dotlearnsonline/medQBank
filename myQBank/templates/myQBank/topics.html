@@ -37,6 +37,7 @@
             {% for question_set in all_questions %}
             <div class="p-2">
             <div class="card  p-3">
+            <div id="card{{question_set.0.question.id}}">
             <strong id="question{{question_set.0.question.id}}" data-attempts="0"
                 data-clicked="0"
                 data-course="{{question_set.0.question.course.course_name}}"
@@ -52,8 +53,9 @@
             </ol>
             <div id="correct-answer{{question_set.0.question.id}}" class="correct-answer"><i class="fi fi-bs-check"></i></div>
             <div id="wrong-answer{{question_set.0.question.id}}" class="wrong-answer"><i class="fi fi-br-cross"></i></div>
+        </div>
             {% if user.is_superuser %}
-            <em><a class="edit" href="#nope" data-questionid="{{question_set.0.question.id}}">Edit</a></em>
+            <em><a class="edit" id="edit{{question_set.0.question.id}}" href="#nope" data-questionid="{{question_set.0.question.id}}">Edit</a></em>
             <div class="change_answer" id="change_answer{{question_set.0.question.id}}">
                 <!-- Add the question and it's respective questions here -->
                 <form>
