@@ -25,7 +25,9 @@
         {% if all_questions %}
         
         
-      
+        <form action="#NothingToGoTo">
+            {% csrf_token %}
+        </form>
         <div class="col-sm-12  col-md-6 margin-giver">
             <div class="p-1 sticky-top">
             <button class="btn btn-secondary" id="attemptButton"
@@ -50,6 +52,25 @@
             </ol>
             <div id="correct-answer{{question_set.0.question.id}}" class="correct-answer"><i class="fi fi-bs-check"></i></div>
             <div id="wrong-answer{{question_set.0.question.id}}" class="wrong-answer"><i class="fi fi-br-cross"></i></div>
+            {% if user.is_superuser %}
+            <em><a class="edit" href="#nope" data-questionid="{{question_set.0.question.id}}">Edit</a></em>
+            <div class="change_answer" id="change_answer{{question_set.0.question.id}}">
+                <!-- Add the question and it's respective questions here -->
+                <form>
+                    <strong>{{forloop.counter}}. {{question_set.0.question}}</strong>
+                    <div>
+                        {% for option in question_set %}
+                        <input class="option{{question_set.0.question.id}}" type="radio" id="" name="changeAnswer{{question_set.0.question.id}}" value="{{option.id}}">
+                        <label for="changeAnswer{{question_set.0.question.id}}">{{option.option}}</label><br>
+                        {% endfor %}
+                    </div>
+                    <div>
+                        <em><button class="btn btn-link" id="savebutton{{question_set.0.question.id}}" type="button">Save</button></em>
+                    </div>
+                </form>
+                
+            </div>
+            {% endif %}
         </div>
         </div>
             {% endfor %}
@@ -85,4 +106,5 @@
 
 </div>
 <script src="{% static 'myQBank/topics.js' %}"></script>
+<script src="{% static 'myQBank/editAns.js' %}"></script>
 {% endblock %}
