@@ -65,7 +65,7 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
         else:
-            return render(request, "myQbank/login.html", {
+            return render(request, "myQBank/login.html", {
                 "message": "Invalid username and/or password"
             })
     return render(request, "myQBank/login.html")
