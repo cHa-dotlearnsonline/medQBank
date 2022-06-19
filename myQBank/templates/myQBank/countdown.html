@@ -1,4 +1,4 @@
-{% extends 'myQBank/layout.html' %} 
+{% extends 'myQBank/layout.html' %}
 {% load static %}
 {% block body %}
 <!--TODO: Add the countdown timer Here-->
@@ -16,48 +16,54 @@
             <div class="card hours p-1">
                 <p>This is for: hours</p>
             </div>
-    </div>
-    <div class="col-sm-12 col-md-3 margin-giver2">
-        <div class="card minutes p-1">
-            <p>This is for: minutes</p>
         </div>
-</div>
-<div class="col-sm-12 col-md-3 margin-giver2">
-    <div class="card seconds p-1">
-        <p>This is for: seconds</p>
+        <div class="col-sm-12 col-md-3 margin-giver2">
+            <div class="card minutes p-1">
+                <p>This is for: minutes</p>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-3 margin-giver2">
+            <div class="card seconds p-1">
+                <p>This is for: seconds</p>
+            </div>
+        </div>
+        <div class = "col-sm-12">
+            <p> Call: <em><strong style="display: inline; color:rgb(58, 157, 238)">+260978528103</strong></em> for collateral based Loans</p>
+        </div>
+        <div class ="col-sm-12">
+            <p>Call: +260972478400 for collateral based Loans</p>
+        </div>
     </div>
-</div>
-</div>
-<script>
-    // set the date I'm counting down to:
-    var countDownDate = new Date("Nov 4, 2022 00:00:00").getTime();
-    
-    // Update the countdown every 1 second
-    var x = setInterval(function() {
-        // get Today's date and time
-        var now = new Date().getTime(); 
+    <script>
+        // set the date I'm counting down to:
+        var countDownDate = new Date("Nov 4, 2022 00:00:00").getTime();
 
-        // find the distance between now and the count down date
-        var distance = countDownDate - now;
+        // Update the countdown every 1 second
+        var x = setInterval(function () {
+            // get Today's date and time
+            var now = new Date().getTime();
 
-        // Time calculations for days, hours, minutes and seconds
-        var days = Math.floor(distance/(1000 * 60 *60 *24));
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60 ));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000)
+            // find the distance between now and the count down date
+            var distance = countDownDate - now;
 
-        var days2 = document.querySelector('.days');
-        var hours2 = document.querySelector('.hours');
-        var minutes2 = document.querySelector('.minutes');
-        var seconds2 = document.querySelector('.seconds');
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000)
 
-        days2.innerHTML = `<p><h1>${days}</h1></p><p>Days</p>`;
+            var days2 = document.querySelector('.days');
+            var hours2 = document.querySelector('.hours');
+            var minutes2 = document.querySelector('.minutes');
+            var seconds2 = document.querySelector('.seconds');
 
-        hours2.innerHTML = `<p><h1>${hours}</h1></p><p>Hours</p>`;
-        minutes2.innerHTML = `<p><h1>${minutes}</h1></p><p>Minutes</p>`;
-        seconds2.innerHTML = `<p><h1>${seconds}</h1></p><p>Seconds</p>`;
+            days2.innerHTML = `<p><h1>${days}</h1></p><p>Days</p>`;
 
-    }, 1000);
+            hours2.innerHTML = `<p><h1>${hours}</h1></p><p>Hours</p>`;
+            minutes2.innerHTML = `<p><h1>${minutes}</h1></p><p>Minutes</p>`;
+            seconds2.innerHTML = `<p><h1>${seconds}</h1></p><p>Seconds</p>`;
 
-</script>
-{% endblock %}
+        }, 1000);
+
+    </script>
+    {% endblock %}
