@@ -15,5 +15,7 @@ urlpatterns = [
     # this part has the path for adding questions by the site's admins
     path("addQuestions", views.add_question, name="addQuestions"),
     path("statistics/<int:user_course_id>", views.statistics, name="statistics"),
-    path("edit", views.edit, name="edit")
+    path("edit", views.edit, name="edit"),
+    #this part is just for a timer for when I finish Seventh year
+    path("countdown", views.countdown, name="countdown")
 ]

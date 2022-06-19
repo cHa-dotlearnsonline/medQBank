@@ -286,3 +286,6 @@ def edit(request):
 def get_value(dictionary, key):
     dictionary1 = dictionary.get(key)
     return f'Total attempts:{dictionary1["Total"]}, Total Correct:{dictionary1["Correct"]}, Pass Percentage: {dictionary1["Pass"]}%'
+
+def countdown(request):
+    return render(request, 'myQBank/countdown.html')

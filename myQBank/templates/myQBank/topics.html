@@ -23,78 +23,86 @@
 
         {% if user.is_authenticated %}
         {% if all_questions %}
-        
-        
+
+
         <form action="#NothingToGoTo">
             {% csrf_token %}
         </form>
         <div class="col-sm-12  col-md-6 margin-giver">
             <div class="p-1 sticky-top">
-            <button class="btn btn-secondary" id="attemptButton"
-            data-id="{{all_questions.0.0.question.course.id}}">Attempt</button>
-        </div>
+                <button class="btn btn-secondary" id="attemptButton"
+                    data-id="{{all_questions.0.0.question.course.id}}">Attempt</button>
+            </div>
             <div id="messenger"></div>
             {% for question_set in all_questions %}
             <div class="p-2">
-            <div class="card  p-3">
-            <div id="card{{question_set.0.question.id}}">
-            <strong id="question{{question_set.0.question.id}}" data-attempts="0"
-                data-clicked="0"
-                data-course="{{question_set.0.question.course.course_name}}"
-                data-topic="{{question_set.0.question.topic.topic_name}}"
-                data-questionid="{{question_set.0.question.id}}">{{forloop.counter}}.
-                {{question_set.0.question}}</strong>
-            <ol type="a">
-                {% for option in question_set %}
-                <li class="answer answer{{question_set.0.question.id}}" data-correctness="{{option.correctness}}" data-clicked="0"
-                    data-questionid="{{option.question.id}}"> {{ option.option }}
-                </li>
-                {% endfor %}
-            </ol>
-            <div id="correct-answer{{question_set.0.question.id}}" class="correct-answer"><i class="fi fi-bs-check"></i></div>
-            <div id="wrong-answer{{question_set.0.question.id}}" class="wrong-answer"><i class="fi fi-br-cross"></i></div>
-        </div>
-            {% if user.is_superuser %}
-            <em><a class="edit" id="edit{{question_set.0.question.id}}" href="#nope" data-questionid="{{question_set.0.question.id}}">Edit</a></em>
-            <div class="change_answer" id="change_answer{{question_set.0.question.id}}">
-                <!-- Add the question and it's respective questions here -->
-                <form>
-                    <strong>{{forloop.counter}}. {{question_set.0.question}}</strong>
-                    <div>
-                        {% for option in question_set %}
-                        <input class="option{{question_set.0.question.id}}" type="radio" id="{{option.id}}" name="changeAnswer{{question_set.0.question.id}}" value="{{option.id}}">
-                        <label for={{option.id}}>{{option.option}}</label><br>
-                        {% endfor %}
+                <div class="card  p-3">
+                    <div id="card{{question_set.0.question.id}}">
+                        <strong id="question{{question_set.0.question.id}}" data-attempts="0" data-clicked="0"
+                            data-course="{{question_set.0.question.course.course_name}}"
+                            data-topic="{{question_set.0.question.topic.topic_name}}"
+                            data-questionid="{{question_set.0.question.id}}">{{forloop.counter}}.
+                            {{question_set.0.question}}</strong>
+                        <ol type="a">
+                            {% for option in question_set %}
+                            <li class="answer answer{{question_set.0.question.id}}"
+                                data-correctness="{{option.correctness}}" data-clicked="0"
+                                data-questionid="{{option.question.id}}"> {{ option.option }}
+                            </li>
+                            {% endfor %}
+                        </ol>
+                        <div id="correct-answer{{question_set.0.question.id}}" class="correct-answer"><i
+                                class="fi fi-bs-check"></i></div>
+                        <div id="wrong-answer{{question_set.0.question.id}}" class="wrong-answer"><i
+                                class="fi fi-br-cross"></i></div>
                     </div>
-                    <div>
-                        <em><button class="btn btn-link" id="savebutton{{question_set.0.question.id}}" type="button">Save</button></em>
+                    {% if user.is_superuser %}
+                    <em><a class="edit" id="edit{{question_set.0.question.id}}" href="#nope"
+                            data-questionid="{{question_set.0.question.id}}">Edit</a></em>
+                    <div class="change_answer" id="change_answer{{question_set.0.question.id}}">
+                        <!-- Add the question and it's respective questions here -->
+                        <form>
+                            <strong>{{forloop.counter}}. {{question_set.0.question}}</strong>
+                            <div>
+                                {% for option in question_set %}
+                                <input class="option{{question_set.0.question.id}}" type="radio" id="{{option.id}}"
+                                    name="changeAnswer{{question_set.0.question.id}}" value="{{option.id}}">
+                                <label for={{option.id}}>{{option.option}}</label><br>
+                                {% endfor %}
+                            </div>
+                            <div>
+                                <em><button class="btn btn-link" id="savebutton{{question_set.0.question.id}}"
+                                        type="button">Save</button></em>
+                            </div>
+                        </form>
+
                     </div>
-                </form>
-                
+                    {% endif %}
+                </div>
             </div>
-            {% endif %}
-        </div>
-        </div>
             {% endfor %}
             <nav aria-label="Page navigation example">
-            <ul class="pagination pagination-sm">
-                <!-- <span class="step-links"> -->
+                <ul class="pagination pagination-sm">
+                    <!-- <span class="step-links"> -->
                     {% if all_questions.has_previous %}
-                        <li class="page-item"><a class="page-link" href="?page=1">&laquo;</a></li>
-                        <li class="page-item"><a class="page-link" href="?page={{ all_questions.previous_page_number }}">previous</a></li>
+                    <li class="page-item"><a class="page-link" href="?page=1">&laquo;</a></li>
+                    <li class="page-item"><a class="page-link"
+                            href="?page={{ all_questions.previous_page_number }}">previous</a></li>
                     {% endif %}
-            
+
                     <span class="current">
                         {{ all_questions.number }} of {{ all_questions.paginator.num_pages }}.
                     </span>
-            
+
                     {% if all_questions.has_next %}
-                        <li class="page-item"><a class="page-link" href="?page={{ all_questions.next_page_number }}">next</a></li>
-                        <li class="page-item"><a class="page-link" href="?page={{ all_questions.paginator.num_pages }}">&raquo;</a></li>
+                    <li class="page-item"><a class="page-link"
+                            href="?page={{ all_questions.next_page_number }}">next</a></li>
+                    <li class="page-item"><a class="page-link"
+                            href="?page={{ all_questions.paginator.num_pages }}">&raquo;</a></li>
                     {% endif %}
-                <!-- </span> -->
-            </ul>
-        </nav>
+                    <!-- </span> -->
+                </ul>
+            </nav>
             {% endif %}
 
 
