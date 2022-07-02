@@ -281,6 +281,25 @@ def edit(request):
                     answer.correctness = False
                     answer.save()
             return HttpResponse(status=204)
+
+    # TODO: Add a put request for editing the content of a question:
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        question = data["question"]
+        questionID = int(data["identityNumber"])
+        fullQuestion = Question.objects.get(id=questionID)
+        fullQuestion.question = question 
+        fullQuestion.save()
+        all_options = data["theOptions"]
+        for option in all_options:
+            id_of_option = option.keys()
+            for key in id_of_option:
+                id_of_option1 = int(key)
+                answer_to_change = Answer.objects.get(id=id_of_option1)
+                answer_to_change.option = option[key]
+                answer_to_change.save()
+        return HttpResponse(status=204)
+        
     return HttpResponse("Method Not allowed")
 @register.filter
 def get_value(dictionary, key):

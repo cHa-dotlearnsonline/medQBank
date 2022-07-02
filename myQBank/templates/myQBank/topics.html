@@ -59,6 +59,7 @@
                     {% if user.is_superuser %}
                     <em><a class="edit" id="edit{{question_set.0.question.id}}" href="#nope"
                             data-questionid="{{question_set.0.question.id}}">Edit</a></em>
+                    <em><a class="editX" id="editX{{question_set.0.question.id}}" href="#nope" data-questionid="{{question_set.0.question.id}}"><i class="fa-solid fa-pen"></i></a></em>
                     <div class="change_answer" id="change_answer{{question_set.0.question.id}}">
                         <!-- Add the question and it's respective questions here -->
                         <form>
@@ -77,6 +78,24 @@
                         </form>
 
                     </div>
+                    <div class="change_answerX" id="change_answerX{{question_set.0.question.id}}">
+                        <!-- Add the question here in an editable box-->
+                        <form>
+                        <div class="form-group">
+                            <textarea class="form-control" type="text" name="question" id="questionX{{question_set.0.question.id}}" style="height: 10vw;">{{question_set.0.question}}</textarea> 
+                        </div>
+                        {% for option in question_set %}
+                        <div class="form-group">
+                            
+                            <input class="form-control optionX{{question_set.0.question.id}}"  type="text" data-id="{{option.id}}" id="X{{option.id}}" name="changeAnswerX{{question_set.0.question.id}}" value="{{option.option}}">
+                            
+                        </div>
+                        {% endfor %}
+                        <em><button class="btn btn-link" id="saveButtonX{{question_set.0.question.id}}" type="button"><i class="fa-regular fa-floppy-disk"></i></button></em>
+                    </form>
+
+                    </div>
+
                     {% endif %}
                 </div>
             </div>

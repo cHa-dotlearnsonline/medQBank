@@ -1,5 +1,5 @@
 Edit()
-
+EditX()
 function Edit() {
     const csrftoken = getCookie('csrftoken')
     var edit_views = document.querySelectorAll('.change_answer')
@@ -48,7 +48,63 @@ function Edit() {
         })
     })
 }
+//This function to edit the question
+function EditX() {
+    const csrftoken = getCookie('csrftoken')
+    var editX_views = document.querySelectorAll('.change_answerX')
+    editX_views.forEach(view => {
+        view.style.display = 'none'
+    })
+    var editX_buttons = document.querySelectorAll('.editX')
+    editX_buttons.forEach(button => {
+        let questionID = parseInt(button.dataset['questionid'])
+        button.addEventListener('click', () => {
+            let editButtonDisplay = document.querySelector(`#edit${questionID}`)
+            editButtonDisplay.style.display = 'none'
+            let editXButtonDisplay = document.querySelector(`#editX${questionID}`)
+            editXButtonDisplay.style.display = 'none'
+            let edit_boy = document.querySelector(`#change_answer${questionID}`)
+            edit_boy.style.display = 'none'
+            let editX_boy = document.querySelector(`#change_answerX${questionID}`)
+            editX_boy.style.display = 'block'
+            let card_boy = document.querySelector(`#card${questionID}`)
+            card_boy.style.display = 'none'
+            
+            let save_boy = document.querySelector(`#saveButtonX${questionID}`)
+            let all_options = document.querySelectorAll(`.optionX${questionID}`)
+            let edited_options = []
+            save_boy.addEventListener('click', () => {
+                let editedQuestion = document.querySelector(`#questionX${questionID}`).value
 
+                all_options.forEach(option => {
+                    var answer_Object = {}
+                    var optionXID = option.dataset['id']
+                    var optionValue = option.value 
+                    answer_Object[`${optionXID}`] = optionValue
+                    edited_options.push(answer_Object)
+                })
+                card_boy.style.display = 'block'
+                editX_boy.style.display = 'none'
+                editXButtonDisplay.style.display = 'block'
+                editButtonDisplay.style.display = 'block'
+                fetch('/edit', {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        question : editedQuestion,
+                        identityNumber : questionID,
+                        theOptions: edited_options
+                    }),
+                    headers:{'X-CSRFToken': csrftoken},
+                    mode: 'same-origin'
+                })
+
+            })
+        })
+
+
+    })
+
+}
 
 function getCookie(name) {
     let cookieValue = null;
