@@ -1,6 +1,7 @@
 add_question()
 add_option()
-
+hideForms()
+addSubquestion()
 function add_question() {
     const csrftoken = getCookie('csrftoken')
     document.querySelector('#submitbutton').onclick = () => {
@@ -60,6 +61,36 @@ function add_option() {
                             <label  for="correct${all_answers+1}">Marks as Correct</label>
                             </div>`
         extraOptionDiv.insertAdjacentHTML("beforeend", what_to_add)
+    })
+}
+
+function hideForms() {
+    let mcqForm = document.querySelector('#question-form')
+    mcqForm.style.display = 'none'
+    let essayForm = document.querySelector('.essayQuestion')
+    essayForm.style.display = 'none'
+    // add event listeners to the two buttons so that clicking them will diplay one form and hide the other
+    let essayButton = document.querySelector('#essayButton')
+    let mcqButton = document.querySelector('#mcqButton')
+    essayButton.addEventListener('click', () => {
+        essayForm.style.display = 'block'
+        mcqForm.style.display = 'none'
+    })
+    mcqButton.addEventListener('click', () => {
+        essayForm.style.display = 'none'
+        mcqForm.style.display = 'block'
+    } )
+}
+function addSubquestion() {
+    document.querySelector('#addSubQ').addEventListener('click', () => {
+        let subQuestionDiv = document.querySelector('.subquestion')
+        let all_subqs = parseInt(subQuestionDiv.dataset["totalsubqs"])
+        let new_sub_q = `<div class="form-group">
+        <textarea id="subQuestion${all_subqs+1}" type="text", class="form-control subq" placeholder="Type subquestion here"></textarea>
+        <textarea  id="subQuestionAns${all_subqs+1}" type="text" class="formControl subans" placeholder="Type answer to Subquestion here></textarea>
+        </div>`
+        subQuestionDiv.insertAdjacentHTML("beforeend", new_sub_q)
+        subQuestionDiv.dataset["totalsubqs"] = all_subqs+1
     })
 }
 

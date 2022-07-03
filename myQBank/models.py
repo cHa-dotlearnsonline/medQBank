@@ -117,3 +117,19 @@ class Userscourses(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # reference the course being taken
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+class EssayQuestion(models.Model):
+    question = models.TextField()
+    #the picture field is just a place holder
+    #before I figure out how to upload an image 
+    # to a django field so that I am able to have the question
+    picture = models.URLField(blank = True)
+
+class EssayAnswer(models.Model):
+    answer = models.TextField()
+    essay_question = models.ForeignKey(EssayQuestion, on_delete=models.CASCADE)
+
+class SubQuestion(models.Model):
+    subQuestion = models.TextField()
+    essay_question =models.ForeignKey(EssayQuestion, on_delete=models.CASCADE)
+    essay_answer = models.ForeignKey(EssayAnswer, on_delete=models.CASCADE)

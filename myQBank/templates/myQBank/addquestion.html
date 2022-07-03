@@ -1,12 +1,19 @@
 {% extends 'myQBank/layout.html' %}
 {% load static %} 
 {% block body %} 
-<!--TODO: Form for adding questions-->
+<!--TODO: Form for adding multiple choice  questions-->
 <section class="form-center">
     <div class="container-fluid">
         <div class="row d-flex justify-content-center">
             <h2 class="col-sm-12">Add Question</h2>
+            <div class="form-group col-sm-5">
+                <button id="essayButton" class="btn btn-secondary">Essay Question</button>
+            </div>
+            <div class="form-grou col-sm-4">
+                <button id="mcqButton" class="btn btn-seconday">MCQ</button>
+            </div>
             <div class="col-md-6">
+                
                 <form id="question-form" method="post">
                     {% csrf_token %}
                     <div class="form-group">
@@ -48,9 +55,33 @@
                         <input id="submitbutton" type="button" value="Save Question" class="btn btn-primary" >
                         <button id="addOption" type="button" class="btn btn-outline">Add Option</button> 
                     </div>
-                    
-
                 </form>
+                <div class="essayQuestion">
+                    <form>
+                        <div class="mainQuestion form-group">
+                            <div class="form-group">
+                                <textarea class="form-control" placeholder="Enter Essay Question here"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" placeholder="Answer for Question"></textarea> 
+                            </div>
+                        </div>
+                        <div class="subquestion" data-totalsubqs="0">
+                
+                        </div>
+                        <div class="form-group">
+                            <input type="url" class="form-control" id="courseImage" placeholder="Picture here for pictured Questions">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" id="courseName" placeholder="Course">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control"type="text" id="topicName" placeholder="Topic">
+                        </div>
+                        <input id="submitbutton2" type="button" value="Save Question" class="btn btn-primary" >
+                        <button id = "addSubQ" class="btn btn-primary" type="button">+SubQuestion</button>  
+                    </form>
+                </div>
             </div>
         </div>
     </div>
