@@ -18,6 +18,8 @@ class Course(models.Model):
 class Topic(models.Model):
     topic_name = models.CharField(max_length=255)
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
+    essay_topic = models.BooleanField(default=False)
+    mcq_topic = models.BooleanField(default=True) 
     def __str__(self):
         return f"{self.topic_name}"
 
@@ -124,9 +126,15 @@ class EssayQuestion(models.Model):
     #before I figure out how to upload an image 
     # to a django field so that I am able to have the question
     picture = models.URLField(blank = True)
+    has_picture = models.BooleanField(default=False)
+
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    # reference the topic under which the question is
+    topic = models.ForeignKey(Topic, on_delete = models.CASCADE)
 
 class EssayAnswer(models.Model):
     answer = models.TextField()
+    is_main = models.BooleanField(default=False)
     essay_question = models.ForeignKey(EssayQuestion, on_delete=models.CASCADE)
 
 class SubQuestion(models.Model):

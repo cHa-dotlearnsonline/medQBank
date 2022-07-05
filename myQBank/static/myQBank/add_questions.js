@@ -2,6 +2,7 @@ add_question()
 add_option()
 hideForms()
 addSubquestion()
+addEssayQuestion()
 function add_question() {
     const csrftoken = getCookie('csrftoken')
     document.querySelector('#submitbutton').onclick = () => {
@@ -25,7 +26,7 @@ function add_question() {
             document.querySelector(`#correct${option_tracker}`).checked = false
             option_tracker++
             var answer_object = {}
-            answer_object[`${get_answer}`] = is_correct 
+            answer_object[`${get_answer}`] = is_correct
             all_options.push(answer_object)
             console.log(get_answer)
 
@@ -39,7 +40,7 @@ function add_question() {
                 courseImage: course_image,
                 theOptions: all_options
             }),
-            headers:{'X-CSRFToken': csrftoken},
+            headers: { 'X-CSRFToken': csrftoken },
             mode: 'same-origin'
         })
         document.querySelector("#question1").value = ''
@@ -55,10 +56,10 @@ function add_option() {
     document.querySelector('#addOption').addEventListener('click', () => {
         var extraOptionDiv = document.querySelector('#extra-option')
         var all_answers = document.querySelectorAll(".answer").length
-        var what_to_add= `<div class="form-group">
-                            <input id="option${all_answers+1}" type="text" name="option${all_answers+1}" class="form-control answer" placeholder="Option Number ${all_answers+1}">
-                            <input id="correct${all_answers+1}" class="form-check-input" type="checkbox" name="correct${all_answers+1}" value="True">
-                            <label  for="correct${all_answers+1}">Marks as Correct</label>
+        var what_to_add = `<div class="form-group">
+                            <input id="option${all_answers + 1}" type="text" name="option${all_answers + 1}" class="form-control answer" placeholder="Option Number ${all_answers + 1}">
+                            <input id="correct${all_answers + 1}" class="form-check-input" type="checkbox" name="correct${all_answers + 1}" value="True">
+                            <label  for="correct${all_answers + 1}">Marks as Correct</label>
                             </div>`
         extraOptionDiv.insertAdjacentHTML("beforeend", what_to_add)
     })
@@ -79,21 +80,69 @@ function hideForms() {
     mcqButton.addEventListener('click', () => {
         essayForm.style.display = 'none'
         mcqForm.style.display = 'block'
-    } )
+    })
 }
 function addSubquestion() {
     document.querySelector('#addSubQ').addEventListener('click', () => {
         let subQuestionDiv = document.querySelector('.subquestion')
         let all_subqs = parseInt(subQuestionDiv.dataset["totalsubqs"])
         let new_sub_q = `<div class="form-group">
-        <textarea id="subQuestion${all_subqs+1}" type="text", class="form-control subq" placeholder="Type subquestion here"></textarea>
-        <textarea  id="subQuestionAns${all_subqs+1}" type="text" class="formControl subans" placeholder="Type answer to Subquestion here></textarea>
+        <textarea id="subQuestion${all_subqs + 1}" type="text", class="form-control subq" placeholder="Type subquestion here"></textarea>
+        <textarea  id="subQuestionAns${all_subqs + 1}" type="text" class="formControl subans" placeholder="Type answer to Subquestion here></textarea>
         </div>`
         subQuestionDiv.insertAdjacentHTML("beforeend", new_sub_q)
-        subQuestionDiv.dataset["totalsubqs"] = all_subqs+1
+        subQuestionDiv.dataset["totalsubqs"] = all_subqs + 1
     })
 }
+function addEssayQuestion() {
+    const csrftoken = getCookie('csrftoken')
+    // TODO: find the main Question
+    document.querySelector('#submitbutton2').addEventListener('click', () => {
+        let mainQuestion = document.querySelector('#mainQuestion').value
+        let courseImage2 = document.querySelector('#courseImage2').value
+        let mainQuestionImage = document.querySelector('#mainQuestionImage').value
+        let mainQuestionAnswer = document.querySelector('#mainQuestionAnswer').value
+        let essayCourseName = document.querySelector('#essayCourseName').value
+        let essayTopicName = document.querySelector('#essayTopicName').value
+        let totalSubQs = parseInt(document.querySelector('.subquestion').dataset['totalsubqs']) + 1
+        let subQAnswerArray = []
+        if (totalSubQs > 0) {
+            for (let i=1; i < totalSubQs; i++) {
+                let ans_obj = {}
+                let subQuestion = document.querySelector(`#subQuestion${i}`).value 
+                let subQuestionAns = document.querySelector(`#subQuestionAns${i}`).value
+                ans_obj[subQuestion] = subQuestionAns
+                subQAnswerArray.push(ans_obj)
+            }
+        }
 
+        fetch('/addQuestions', {
+            method: 'PUT', 
+            body: JSON.stringify({
+                question: mainQuestion,
+                image: mainQuestionImage,
+                mainAnswer: mainQuestionAnswer,
+                course: essayCourseName,
+                topic: essayTopicName,
+                subquestions: subQAnswerArray,
+                courseImage: courseImage2
+            }),
+            headers:{'X-CSRFToken': csrftoken},
+            mode: 'same-origin'
+        })
+        console.log(`${mainQuestion},${mainQuestionImage},${essayCourseName},${essayTopicName}`)
+        document.querySelector('#mainQuestion').value = ''
+        document.querySelector('#courseImage2').value =''
+        document.querySelector('#mainQuestionImage').value =''
+        document.querySelector('#mainQuestionAnswer').value =''
+        document.querySelector('#essayCourseName').value =''
+        document.querySelector('#essayTopicName').value =''
+        document.querySelector('.subquestion').dataset['totalsubqs'] = 0
+
+       
+    })
+    //TODO: find the subquestions and the answers(use objects here)
+}
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

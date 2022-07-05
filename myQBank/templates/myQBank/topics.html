@@ -8,11 +8,26 @@
     I'm picking topic id because I think sometopics will have
     the same title but the be underdifferent courses-->
     {% if user.is_authenticated %}
+    {% if Topics %}
+    <h1>MCQ Topics</h1>
     {% for topic in Topics %}
+    {% if topic.mcq_topic %}
     <a href="{% url 'questions' topic.id %}">
         <li>{{ topic.topic_name }}</li>
     </a>
+    {% endif %}
     {% endfor %}
+    <hr>
+    <h1>Essay Topics</h1>
+    {% for topic in Topics %}
+    {% if topic.essay_topic %}
+    <a href="{% url 'essays' topic.id %}">
+        <li>{{ topic.topic_name }}</li>
+    </a>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    
     {% else %}
     <p>Please <a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Sign Up</a> to see material </p>
     {% endif %}

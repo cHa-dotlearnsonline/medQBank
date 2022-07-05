@@ -1,12 +1,13 @@
 import json
 from django.template.defaulttags import register
+import validators
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.db import DataError, IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from .models import Attempted, User, Course, Topic, Answer, Question, Userscourses, Attempt
+from .models import Attempted, User, Course, Topic, Answer, Question, Userscourses, Attempt, EssayQuestion, EssayAnswer, SubQuestion
 
 # Create your views here.
 def index(request):
@@ -38,7 +39,7 @@ def questions_view(request, topic_id):
     all_answers = []
     # get the topic with the corresponding topic_id
     get_topic = Topic.objects.get(id=topic_id)
-    # get the queryset of all the questions under/with this topic
+    # get the queryset of all the mcq questions under/with this topic
     get_questions = Question.objects.filter(topic=get_topic)
     # create a for loop that gets the answers for each particular question
     for question in get_questions:
@@ -52,6 +53,29 @@ def questions_view(request, topic_id):
     return render(request, "myQBank/topics.html", {
         #all_questions": all_answers,
         "all_questions": page_obj
+    })
+def essays_view(request, topic_id):
+    # get all the main questions
+    topicID = int(topic_id)
+    get_topic = Topic.objects.get(id=topicID)
+    mainEssays = EssayQuestion.objects.filter(topic=get_topic)
+    all_questions = []
+    #have a list of lists so each list will be like this
+    #a question followed by it's subquestions, then to see the answer I will
+    # javascript so that when a use clicks see answer thats when they see the answer
+    for essayQ in mainEssays:
+        q_subqs = []
+        associated_ans = EssayAnswer.objects.filter(essay_question=essayQ)
+
+        all_subqs = SubQuestion.objects.filter(essay_question=essayQ)
+        q_subqs.append(essayQ)
+        for ans in associated_ans:
+            if ans.is_main:
+                q_subqs.append(ans)
+        q_subqs.append(all_subqs)
+        all_questions.append(q_subqs)
+    return render(request, "myQBank/essays.html", {
+        "all_questions": all_questions
     })
 
 def login_view(request):
@@ -224,11 +248,11 @@ def add_question(request):
             try:
                 set_topic = Topic.objects.get(topic_name__iexact=topic)
             except Topic.DoesNotExist:
-                set_topic = Topic(topic_name=topic, course=set_course)
+                set_topic = Topic(topic_name=topic, course=set_course, mcq_topic=True)
                 set_topic.save()
-                set_topic = Topic.objects.get(topic_name__iexact=topic)
+            set_topic = Topic.objects.get(topic_name__iexact=topic)
             set_question = Question(
-                question=question, course=set_course, topic=set_topic)
+            question=question, course=set_course, topic=set_topic)
             set_question.save()
             for answer in theOptions:
                 for option, correctness in answer.items():
@@ -238,6 +262,59 @@ def add_question(request):
                         option=option, correctness=correctness, question=set_question)
                     set_answer.save()
         return HttpResponse(status=204)
+
+#let me sleep I will finish this thing tomorrow
+# whatever problems I have created for myself today I will
+# solve tomorrow. but I should pat myself on the back for 
+# doint what I have done today. I have to wake up at 5:00hrs today
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("question") is not None:
+            mainQuestion = data["question"]
+            mainAnswer = data['mainAnswer']
+            course = data["course"]
+            topic = data["topic"]
+            courseImage = data["courseImage"]
+            questionImage= data["image"]
+            subQuestions = data['subquestions']
+            if len(mainQuestion) > 0:
+                try:
+                    get_course = Course.objects.get(course_name__iexact = course)
+                except Course.DoesNotExist:
+                    set_course = Course(
+                        course_name=course.lower().capitalize(), image_url = courseImage, typical_year = 0
+                    )
+                    set_course.save()
+                set_course = Course.objects.get(course_name__iexact=course)
+                try:
+                    set_topic = Topic.objects.get(topic_name__iexact=topic)
+                    set_topic.essay_topic = True
+                    set_topic.save()
+                except Topic.DoesNotExist:
+                    set_topic = Topic(topic_name=topic, course=set_course, essay_topic=True, mcq_topic = False)
+                    set_topic.save()
+                    set_topic = Topic.objects.get(topic_name__iexact=topic)
+                if validators.url(questionImage):
+                    set_question = EssayQuestion(
+                        question=mainQuestion, picture=questionImage, course=set_course, topic=set_topic, has_picture=True)
+                    set_question.save()
+                else:
+                    set_question = EssayQuestion(
+                        question=mainQuestion, picture=questionImage, course=set_course, topic=set_topic)
+                    set_question.save()
+                set_answer = EssayAnswer(answer=mainAnswer, essay_question=set_question, is_main=True)
+                set_answer.save()
+                get_question = EssayQuestion.objects.get(question=mainQuestion)
+            if len(subQuestions) > 0:
+                for subquestion in subQuestions:
+                    for quest, ans in subquestion.items():
+                        set_essay_answer = EssayAnswer(anwer=ans, essay_question=get_question)
+                        set_essay_answer.save()
+                        set_essay_answer = EssayAnswer.objects.get(answer=ans)
+                        set_subQ = SubQuestion(subQuestion = quest, essay_question = get_question, essay_answer = set_essay_answer)
+                        set_subQ.save()
+            return HttpResponse(204)
+
     return render(request, 'myQBank/addquestion.html')
 
 def statistics(request, user_course_id):

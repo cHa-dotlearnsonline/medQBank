@@ -4,6 +4,8 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("course/<str:course>", views.course_view, name="course"),
+    #this view is for questions that are essay topics
+    path("essay/<int:topic_id>",views.essays_view, name="essays"),
     path("questions/<int:topic_id>", views.questions_view, name="questions"),
     path("login", views.login_view, name="login"),
     path("register", views.register_view, name="register"),

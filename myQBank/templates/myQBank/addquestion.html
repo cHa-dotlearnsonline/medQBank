@@ -60,23 +60,27 @@
                     <form>
                         <div class="mainQuestion form-group">
                             <div class="form-group">
-                                <textarea class="form-control" placeholder="Enter Essay Question here"></textarea>
+                                <textarea id="mainQuestion" class="form-control" placeholder="Enter Essay Question here"></textarea>
                             </div>
                             <div class="form-group">
-                                <textarea class="form-control" placeholder="Answer for Question"></textarea> 
+                                <input type="url" class="form-control" id="mainQuestionImage" placeholder="Picture URL here for pictured Questions">
+                            </div>
+                            <div class="form-group">
+                                <input type="url" class="form-control" id="courseImage2" placeholder="Place course image URL here">
+                            </div>
+                            <div class="form-group">
+                                <textarea id="mainQuestionAnswer" class="form-control" placeholder="Answer for Question"></textarea> 
                             </div>
                         </div>
                         <div class="subquestion" data-totalsubqs="0">
                 
                         </div>
+                        
                         <div class="form-group">
-                            <input type="url" class="form-control" id="courseImage" placeholder="Picture here for pictured Questions">
+                            <input class="form-control" type="text" id="essayCourseName" placeholder="Course">
                         </div>
                         <div class="form-group">
-                            <input class="form-control" type="text" id="courseName" placeholder="Course">
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control"type="text" id="topicName" placeholder="Topic">
+                            <input class="form-control"type="text" id="essayTopicName" placeholder="Topic">
                         </div>
                         <input id="submitbutton2" type="button" value="Save Question" class="btn btn-primary" >
                         <button id = "addSubQ" class="btn btn-primary" type="button">+SubQuestion</button>  

@@ -1,0 +1,29 @@
+{% extends "myQBank/layout.html" %}
+{% load static %} 
+{% block body %} 
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-11 margin-giver">            
+            {% for question in all_questions %}
+            <strong><h3>{{question.0.question}}</h3> </strong>
+            <div>Answer</div>
+            <ul>
+                <li>
+                    {{question.1.answer}}
+                </li>
+            </ul>
+
+            {% for subq in question.2 %}
+            <h6>{{subq.SubQuestion}}</h6>
+            <div>
+                <p>
+                    {{subq.essay_answer.answer}}
+                </p>
+            </div>
+            {% endfor %}
+            {% endfor %}
+            <hr>
+        </div>
+    </div>
+</div>
+{% endblock %}
