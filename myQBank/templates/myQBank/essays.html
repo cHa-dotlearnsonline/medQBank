@@ -6,6 +6,9 @@
         <div class="col-sm-11 margin-giver">            
             {% for question in all_questions %}
             <strong><h3>{{question.0.question}}</h3> </strong>
+            {% if question.0.has_picture %}
+            <img src="{{question.0.picture}}" alt="">
+            {% endif %}
             <div>Answer</div>
             <ul>
                 <li>
