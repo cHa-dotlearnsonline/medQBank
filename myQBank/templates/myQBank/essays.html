@@ -5,27 +5,43 @@
     <div class="row">
         <div class="col-sm-11 margin-giver">            
             {% for question in all_questions %}
-            <strong><h3>{{question.0.question}}</h3> </strong>
+            <div style="text-align: left;">
+                <strong><h3>{{question.0.question}}</h3> </strong>
+            </div>
+            
             {% if question.0.has_picture %}
-            <img src="{{question.0.picture}}" alt="">
+            <div class="card card-body">
+                <img src="{{question.0.picture}}" alt="">
+            </div>
+           
             {% endif %}
-            <div>Answer</div>
-            <ul>
-                <li>
+            <div style="text-align: left;">
+                <a  class= "btn btn-primary" data-toggle="collapse" href="#multiCollapse{{question.0.id}}" role="button" aria-expanded="false" aria-controls="multiCollapse{{question.0.id}}">Answer</a>
+            </div>
+            <br>
+            <div class = "collapse multi-collapse" id="multiCollapse{{question.0.id}}">
+                <div class="card card-body">
                     {{question.1.answer}}
-                </li>
-            </ul>
-
+                </div>
+            </div>
+        
             {% for subq in question.2 %}
-            <h6>{{subq.SubQuestion}}</h6>
+            <h6>{{ subq.subQuestion }}</h6>
+            <div style="text-align: left;">
+                <a  class= "btn btn-primary" data-toggle="collapse" href="#multiCollapse{{subq.id}}" role="button" aria-expanded="false" aria-controls="multiCollapse{{subq.id}}">Answer</a>
+            </div>
+            <br>
             <div>
-                <p>
-                    {{subq.essay_answer.answer}}
-                </p>
+                <div class="collapse multi-collapse" id="multiCollapse{{subq.id}}">
+                    <div class="card card-body">
+                        {{subq.essay_answer.answer}}
+                    </div>
+                </div>    
             </div>
             {% endfor %}
-            {% endfor %}
             <hr>
+            {% endfor %}
+        
         </div>
     </div>
 </div>

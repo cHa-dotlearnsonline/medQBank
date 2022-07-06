@@ -84,12 +84,15 @@ function hideForms() {
 }
 function addSubquestion() {
     document.querySelector('#addSubQ').addEventListener('click', () => {
-        let subQuestionDiv = document.querySelector('.subquestion')
+        let subQuestionDiv = document.querySelector('#subquestion')
         let all_subqs = parseInt(subQuestionDiv.dataset["totalsubqs"])
         let new_sub_q = `<div class="form-group">
-        <textarea id="subQuestion${all_subqs + 1}" type="text", class="form-control subq" placeholder="Type subquestion here"></textarea>
-        <textarea  id="subQuestionAns${all_subqs + 1}" type="text" class="formControl subans" placeholder="Type answer to Subquestion here></textarea>
-        </div>`
+        <div><textarea id="subQuestion${all_subqs + 1}" type="text", class="form-control subq" placeholder="Type subquestion here"></textarea></div>
+        </div>
+        <div class="form-group">
+        <div><textarea id="subQuestionAns${all_subqs + 1}" type="text", class="form-control subqans" placeholder="Type subquestion Answer here"></textarea></div>
+        </div>
+        `
         subQuestionDiv.insertAdjacentHTML("beforeend", new_sub_q)
         subQuestionDiv.dataset["totalsubqs"] = all_subqs + 1
     })
@@ -104,11 +107,12 @@ function addEssayQuestion() {
         let mainQuestionAnswer = document.querySelector('#mainQuestionAnswer').value
         let essayCourseName = document.querySelector('#essayCourseName').value
         let essayTopicName = document.querySelector('#essayTopicName').value
-        let totalSubQs = parseInt(document.querySelector('.subquestion').dataset['totalsubqs']) + 1
+        let totalSubQs = parseInt(document.querySelector('#subquestion').dataset['totalsubqs']) + 1
         let subQAnswerArray = []
         if (totalSubQs > 0) {
             for (let i=1; i < totalSubQs; i++) {
                 let ans_obj = {}
+                console.log(i)
                 let subQuestion = document.querySelector(`#subQuestion${i}`).value 
                 let subQuestionAns = document.querySelector(`#subQuestionAns${i}`).value
                 ans_obj[subQuestion] = subQuestionAns
@@ -137,7 +141,8 @@ function addEssayQuestion() {
         document.querySelector('#mainQuestionAnswer').value =''
         document.querySelector('#essayCourseName').value =''
         document.querySelector('#essayTopicName').value =''
-        document.querySelector('.subquestion').dataset['totalsubqs'] = 0
+        document.querySelector('#subquestion').dataset['totalsubqs'] = 0
+        document.querySelector("#subquestion").innerHTML=''
 
        
     })
