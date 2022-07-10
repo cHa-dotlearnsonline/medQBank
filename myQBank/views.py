@@ -308,7 +308,7 @@ def add_question(request):
             if len(subQuestions) > 0:
                 for subquestion in subQuestions:
                     for quest, ans in subquestion.items():
-                        set_essay_answer = EssayAnswer(anwer=ans, essay_question=get_question)
+                        set_essay_answer = EssayAnswer(answer=ans, essay_question=get_question)
                         set_essay_answer.save()
                         set_essay_answer = EssayAnswer.objects.get(answer=ans)
                         set_subQ = SubQuestion(subQuestion = quest, essay_question = get_question, essay_answer = set_essay_answer)
