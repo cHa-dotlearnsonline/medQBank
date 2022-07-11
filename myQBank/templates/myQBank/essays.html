@@ -23,23 +23,15 @@
             <br>
             <div class = "collapse multi-collapse" id="multiCollapse{{question.0.id}}">
                 <div class="card card-body">
-<<<<<<< HEAD
-                    {{question.1.answer}}
-=======
                     {% autoescape off %}
                     {{question.1.answer}}
                     {% endautoescape %}
->>>>>>> WYSIWYG_try
                 </div>
             </div>
         
             {% for subq in question.2 %}
             <h6>{{ subq.subQuestion }}</h6>
-<<<<<<< HEAD
-            <div style="text-align: left;">
-=======
             <div style="text-align: left; margin-left: 1em;">
->>>>>>> WYSIWYG_try
                 <a  class= "btn btn-primary" data-toggle="collapse" href="#multiCollapse{{subq.id}}" role="button" aria-expanded="false" aria-controls="multiCollapse{{subq.id}}">Answer</a>
             </div>
             <br>
@@ -49,7 +41,6 @@
                         {% autoescape off %}
                         {{subq.essay_answer.answer}}
                         {% endautoescape %}
->>>>>>> WYSIWYG_try
                     </div>
                 </div>    
             </div>
