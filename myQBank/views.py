@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from .models import Attempted, User, Course, Topic, Answer, Question, Userscourses, Attempt, EssayQuestion, EssayAnswer, SubQuestion
-
+import markdown
 # Create your views here.
 def index(request):
     # here I will just query for all the courses in my database
@@ -272,6 +272,7 @@ def add_question(request):
         if data.get("question") is not None:
             mainQuestion = data["question"]
             mainAnswer = data['mainAnswer']
+            mainAnswer = markdown.markdown(mainAnswer)
             course = data["course"]
             topic = data["topic"]
             courseImage = data["courseImage"]
@@ -308,9 +309,9 @@ def add_question(request):
             if len(subQuestions) > 0:
                 for subquestion in subQuestions:
                     for quest, ans in subquestion.items():
-                        set_essay_answer = EssayAnswer(answer=ans, essay_question=get_question)
+                        set_essay_answer = EssayAnswer(answer=markdown.markdown(ans), essay_question=get_question)
                         set_essay_answer.save()
-                        set_essay_answer = EssayAnswer.objects.get(answer=ans)
+                        set_essay_answer = EssayAnswer.objects.get(answer=markdown.markdown(ans))
                         set_subQ = SubQuestion(subQuestion = quest, essay_question = get_question, essay_answer = set_essay_answer)
                         set_subQ.save()
             return HttpResponse(204)
