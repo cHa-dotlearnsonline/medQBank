@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django_quill.fields import QuillField 
 
 # Create your models here.
 
@@ -121,7 +122,7 @@ class Userscourses(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
 class EssayQuestion(models.Model):
-    question = models.TextField()
+    question = QuillField(blank=True)
     #the picture field is just a place holder
     #before I figure out how to upload an image 
     # to a django field so that I am able to have the question
@@ -136,8 +137,13 @@ class EssayAnswer(models.Model):
     answer = models.TextField()
     is_main = models.BooleanField(default=False)
     essay_question = models.ForeignKey(EssayQuestion, on_delete=models.CASCADE)
-
+# I might not need the subquestion thing now that I am using Quill
 class SubQuestion(models.Model):
     subQuestion = models.TextField()
     essay_question =models.ForeignKey(EssayQuestion, on_delete=models.CASCADE)
     essay_answer = models.ForeignKey(EssayAnswer, on_delete=models.CASCADE)
+
+
+    #TODO: So I just need to change some things on how my quill form data is handled
+    #TODO: I will have to forget the javascript that I was using to handle the form for the essay question
+    #TODO: Then after I make the change add questions for obs, imed, surgery, paeds. even If they don't have answers

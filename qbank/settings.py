@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['127.0.0.1','medqbank.herokuapp.com']
 
 INSTALLED_APPS = [
     'myQBank',
+    'django_quil',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
