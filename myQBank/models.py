@@ -122,11 +122,11 @@ class Userscourses(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
 class EssayQuestion(models.Model):
-    question = QuillField(blank=True)
+    question = QuillField()
     #the picture field is just a place holder
     #before I figure out how to upload an image 
     # to a django field so that I am able to have the question
-    picture = models.URLField(blank = True)
+    # picture = models.URLField(blank = True)
     has_picture = models.BooleanField(default=False)
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -134,7 +134,7 @@ class EssayQuestion(models.Model):
     topic = models.ForeignKey(Topic, on_delete = models.CASCADE)
 
 class EssayAnswer(models.Model):
-    answer = models.TextField()
+    answer = QuillField()
     is_main = models.BooleanField(default=False)
     essay_question = models.ForeignKey(EssayQuestion, on_delete=models.CASCADE)
 # I might not need the subquestion thing now that I am using Quill

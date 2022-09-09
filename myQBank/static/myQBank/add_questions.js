@@ -32,7 +32,7 @@ function add_question() {
 
         })
         fetch('/addQuestions', {
-            method: 'POST',
+            method: 'PUT',
             body: JSON.stringify({
                 question: question,
                 course: course,
@@ -97,57 +97,57 @@ function addSubquestion() {
         subQuestionDiv.dataset["totalsubqs"] = all_subqs + 1
     })
 }
-function addEssayQuestion() {
-    const csrftoken = getCookie('csrftoken')
-    // TODO: find the main Question
-    document.querySelector('#submitbutton2').addEventListener('click', () => {
-        let mainQuestion = document.querySelector('#mainQuestion').value
-        let courseImage2 = document.querySelector('#courseImage2').value
-        let mainQuestionImage = document.querySelector('#mainQuestionImage').value
-        let mainQuestionAnswer = document.querySelector('#mainQuestionAnswer').value
-        let essayCourseName = document.querySelector('#essayCourseName').value
-        let essayTopicName = document.querySelector('#essayTopicName').value
-        let totalSubQs = parseInt(document.querySelector('#subquestion').dataset['totalsubqs']) + 1
-        let subQAnswerArray = []
-        if (totalSubQs > 0) {
-            for (let i=1; i < totalSubQs; i++) {
-                let ans_obj = {}
-                console.log(i)
-                let subQuestion = document.querySelector(`#subQuestion${i}`).value 
-                let subQuestionAns = document.querySelector(`#subQuestionAns${i}`).value
-                ans_obj[subQuestion] = subQuestionAns
-                subQAnswerArray.push(ans_obj)
-            }
-        }
+// function addEssayQuestion() {
+//     const csrftoken = getCookie('csrftoken')
+//     // TODO: find the main Question
+//     document.querySelector('#submitbutton2').addEventListener('click', () => {
+//         let mainQuestion = document.querySelector('#mainQuestion').value
+//         let courseImage2 = document.querySelector('#courseImage2').value
+//         let mainQuestionImage = document.querySelector('#mainQuestionImage').value
+//         let mainQuestionAnswer = document.querySelector('#mainQuestionAnswer').value
+//         let essayCourseName = document.querySelector('#essayCourseName').value
+//         let essayTopicName = document.querySelector('#essayTopicName').value
+//         let totalSubQs = parseInt(document.querySelector('#subquestion').dataset['totalsubqs']) + 1
+//         let subQAnswerArray = []
+//         if (totalSubQs > 0) {
+//             for (let i=1; i < totalSubQs; i++) {
+//                 let ans_obj = {}
+//                 console.log(i)
+//                 let subQuestion = document.querySelector(`#subQuestion${i}`).value 
+//                 let subQuestionAns = document.querySelector(`#subQuestionAns${i}`).value
+//                 ans_obj[subQuestion] = subQuestionAns
+//                 subQAnswerArray.push(ans_obj)
+//             }
+//         }
 
-        fetch('/addQuestions', {
-            method: 'PUT', 
-            body: JSON.stringify({
-                question: mainQuestion,
-                image: mainQuestionImage,
-                mainAnswer: mainQuestionAnswer,
-                course: essayCourseName,
-                topic: essayTopicName,
-                subquestions: subQAnswerArray,
-                courseImage: courseImage2
-            }),
-            headers:{'X-CSRFToken': csrftoken},
-            mode: 'same-origin'
-        })
-        console.log(`${mainQuestion},${mainQuestionImage},${essayCourseName},${essayTopicName}`)
-        document.querySelector('#mainQuestion').value = ''
-        document.querySelector('#courseImage2').value =''
-        document.querySelector('#mainQuestionImage').value =''
-        document.querySelector('#mainQuestionAnswer').value =''
-        document.querySelector('#essayCourseName').value =''
-        document.querySelector('#essayTopicName').value =''
-        document.querySelector('#subquestion').dataset['totalsubqs'] = 0
-        document.querySelector("#subquestion").innerHTML=''
+//         fetch('/addQuestions', {
+//             method: 'PUT', 
+//             body: JSON.stringify({
+//                 question: mainQuestion,
+//                 image: mainQuestionImage,
+//                 mainAnswer: mainQuestionAnswer,
+//                 course: essayCourseName,
+//                 topic: essayTopicName,
+//                 subquestions: subQAnswerArray,
+//                 courseImage: courseImage2
+//             }),
+//             headers:{'X-CSRFToken': csrftoken},
+//             mode: 'same-origin'
+//         })
+//         console.log(`${mainQuestion},${mainQuestionImage},${essayCourseName},${essayTopicName}`)
+//         document.querySelector('#mainQuestion').value = ''
+//         document.querySelector('#courseImage2').value =''
+//         document.querySelector('#mainQuestionImage').value =''
+//         document.querySelector('#mainQuestionAnswer').value =''
+//         document.querySelector('#essayCourseName').value =''
+//         document.querySelector('#essayTopicName').value =''
+//         document.querySelector('#subquestion').dataset['totalsubqs'] = 0
+//         document.querySelector("#subquestion").innerHTML=''
 
        
-    })
-    //TODO: find the subquestions and the answers(use objects here)
-}
+//     })
+//     //TODO: find the subquestions and the answers(use objects here)
+// }
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

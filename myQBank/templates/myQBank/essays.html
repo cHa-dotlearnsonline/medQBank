@@ -6,7 +6,7 @@
         <div class="col-sm-11 margin-giver">            
             {% for question in all_questions %}
             <div style="text-align: left;">
-                <strong><h3>{{question.0.question}}</h3> </strong>
+                {{question.0.question.html|safe}}
             </div>
             
             {% if question.0.has_picture %}
@@ -24,7 +24,7 @@
             <div class = "collapse multi-collapse" id="multiCollapse{{question.0.id}}">
                 <div class="card card-body">
                     {% autoescape off %}
-                    {{question.1.answer}}
+                    {{question.1.answer.html}}
                     {% endautoescape %}
                 </div>
             </div>

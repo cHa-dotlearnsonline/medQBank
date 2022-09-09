@@ -9,6 +9,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from .models import Attempted, User, Course, Topic, Answer, Question, Userscourses, Attempt, EssayQuestion, EssayAnswer, SubQuestion
 import markdown
+from django import forms 
+from django_quill.forms import QuillFormField 
 # Create your views here.
 def index(request):
     # here I will just query for all the courses in my database
@@ -67,12 +69,12 @@ def essays_view(request, topic_id):
         q_subqs = []
         associated_ans = EssayAnswer.objects.filter(essay_question=essayQ)
 
-        all_subqs = SubQuestion.objects.filter(essay_question=essayQ)
+        # all_subqs = SubQuestion.objects.filter(essay_question=essayQ)
         q_subqs.append(essayQ)
         for ans in associated_ans:
             if ans.is_main:
                 q_subqs.append(ans)
-        q_subqs.append(all_subqs)
+        #q_subqs.append(all_subqs)
         all_questions.append(q_subqs)
     return render(request, "myQBank/essays.html", {
         "all_questions": all_questions
@@ -229,7 +231,7 @@ def attempt_records(request):
                 return JsonResponse({"error": "No Attempts Yet"})
 
 def add_question(request):
-    if request.method == "POST":
+    if request.method == "PUT":
         data = json.loads(request.body)
         user = request.user
         if data.get("question") is not None:
@@ -267,17 +269,17 @@ def add_question(request):
 # whatever problems I have created for myself today I will
 # solve tomorrow. but I should pat myself on the back for 
 # doint what I have done today. I have to wake up at 5:00hrs today
-    if request.method == "PUT":
-        data = json.loads(request.body)
-        if data.get("question") is not None:
-            mainQuestion = data["question"]
-            mainAnswer = data['mainAnswer']
-            mainAnswer = markdown.markdown(mainAnswer)
-            course = data["course"]
-            topic = data["topic"]
-            courseImage = data["courseImage"]
-            questionImage= data["image"]
-            subQuestions = data['subquestions']
+    if request.method == "POST":
+        #data = json.loads(request.body)
+        form = QuillPostForm(request.POST)
+        if form.is_valid():
+            mainQuestion = form.cleaned_data["essayQ"]
+            mainAnswer = form.cleaned_data['answers2Q']
+            course = request.POST["course"]
+            topic = request.POST["topic"]
+            courseImage = request.POST["courseImage"]
+            #questionImage= request.PUT["image"]
+            #subQuestions = request.PUT['subquestions']
             if len(mainQuestion) > 0:
                 try:
                     get_course = Course.objects.get(course_name__iexact = course)
@@ -295,28 +297,31 @@ def add_question(request):
                     set_topic = Topic(topic_name=topic, course=set_course, essay_topic=True, mcq_topic = False)
                     set_topic.save()
                     set_topic = Topic.objects.get(topic_name__iexact=topic)
-                if validators.url(questionImage):
-                    set_question = EssayQuestion(
-                        question=mainQuestion, picture=questionImage, course=set_course, topic=set_topic, has_picture=True)
-                    set_question.save()
-                else:
-                    set_question = EssayQuestion(
-                        question=mainQuestion, picture=questionImage, course=set_course, topic=set_topic)
-                    set_question.save()
+                # if validators.url(questionImage):
+                #     set_question = EssayQuestion(
+                #         question=mainQuestion, course=set_course, topic=set_topic, has_picture=True)
+                #     set_question.save()
+                # else:
+                set_question = EssayQuestion(
+                    question=mainQuestion, course=set_course, topic=set_topic)
+                set_question.save()
                 set_answer = EssayAnswer(answer=mainAnswer, essay_question=set_question, is_main=True)
                 set_answer.save()
                 get_question = EssayQuestion.objects.get(question=mainQuestion)
-            if len(subQuestions) > 0:
-                for subquestion in subQuestions:
-                    for quest, ans in subquestion.items():
-                        set_essay_answer = EssayAnswer(answer=markdown.markdown(ans), essay_question=get_question)
-                        set_essay_answer.save()
-                        set_essay_answer = EssayAnswer.objects.get(answer=markdown.markdown(ans))
-                        set_subQ = SubQuestion(subQuestion = quest, essay_question = get_question, essay_answer = set_essay_answer)
-                        set_subQ.save()
-            return HttpResponse(204)
+            #if len(subQuestions) > 0:
+            #    for subquestion in subQuestions:
+            #        for quest, ans in subquestion.items():
+            #            set_essay_answer = EssayAnswer(answer=markdown.markdown(ans), essay_question=get_question)
+            #           set_essay_answer.save()
+            #            set_essay_answer = EssayAnswer.objects.get(answer=markdown.markdown(ans))
+            #            set_subQ = SubQuestion(subQuestion = quest, essay_question = get_question, essay_answer = set_essay_answer)
+            #            set_subQ.save()
+            return HttpResponseRedirect(reverse('addQuestions'))
 
-    return render(request, 'myQBank/addquestion.html')
+    return render(request, 'myQBank/addquestion.html', {
+        "quillform": QuillPostForm()
+    })
+
 
 def statistics(request, user_course_id):
     # Get statistics for user
@@ -386,3 +391,7 @@ def get_value(dictionary, key):
 
 def countdown(request):
     return render(request, 'myQBank/countdown.html')
+
+class QuillPostForm(forms.Form):
+    essayQ = QuillFormField()
+    answers2Q = QuillFormField()

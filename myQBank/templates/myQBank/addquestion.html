@@ -1,5 +1,6 @@
 {% extends 'myQBank/layout.html' %}
 {% load static %} 
+{% block media %} {{ quillform.media }} {% endblock %}
 {% block body %} 
 <!--TODO: Form for adding multiple choice  questions-->
 <section class="form-center">
@@ -18,6 +19,7 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <textarea class="form-control" type="text" name="question" id="question1" placeholder="Type Question Here" style="height: 10vw"></textarea> 
+                        <input type="hidden" name="bushe" value="0">
                     </div>
                     <div class="form-group">
                         <input class="form-control" type="text" id="courseName" placeholder="Course">
@@ -57,26 +59,28 @@
                     </div>
                 </form>
                 <div class="essayQuestion">
-                    <form>
+                    <form action="{% url 'addQuestions' %}" method="post">
+                        {% csrf_token %}
                         <div class="mainQuestion form-group">
                             <div class="form-group">
-                                <textarea id="mainQuestion" class="form-control" placeholder="Enter Essay Question here"></textarea>
+                                {{quillform.essayQ}}
+                            </div>
+                            <!-- <div class="form-group">
+                                <input type="url" class="form-control" id="mainQuestionImage" placeholder="Picture URL here for pictured Questions" name="image">
+                            </div> -->
+                            <div class="form-group">
+                                <input type="url" class="form-control" id="courseImage2" placeholder="Place course image URL here" name="courseImage">
+                                <input type="hidden" name="bushe" value="1">
                             </div>
                             <div class="form-group">
-                                <input type="url" class="form-control" id="mainQuestionImage" placeholder="Picture URL here for pictured Questions">
-                            </div>
-                            <div class="form-group">
-                                <input type="url" class="form-control" id="courseImage2" placeholder="Place course image URL here">
-                            </div>
-                            <div class="form-group">
-                                <textarea id="mainQuestionAnswer" class="form-control" placeholder="Answer for Question"></textarea> 
+                                {{quillform.answers2Q}} 
                             </div>
                         </div>
                         <div class="form-group">
-                            <input class="form-control" type="text" id="essayCourseName" placeholder="Course">
+                            <input name="course" class="form-control" type="text" id="essayCourseName" placeholder="Course">
                         </div>
                         <div class="form-group">
-                            <input class="form-control"type="text" id="essayTopicName" placeholder="Topic">
+                            <input class="form-control"type="text" id="essayTopicName" placeholder="Topic" name="topic">
                         </div>
                         <div id="subquestion" data-totalsubqs="0">
 
@@ -84,8 +88,8 @@
                         
                         
                         
-                        <input id="submitbutton2" type="button" value="Save Question" class="btn btn-primary" >
-                        <button id = "addSubQ" class="btn btn-primary" type="button">+SubQuestion</button>  
+                        <input id="submitbutton2" type="submit" value="Save Question" class="btn btn-primary" >
+                        <!-- <button id = "addSubQ" class="btn btn-primary" type="button">+SubQuestion</button>   -->
                     </form>
                 </div>
             </div>
