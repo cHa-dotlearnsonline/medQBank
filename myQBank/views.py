@@ -36,13 +36,20 @@ def course_view(request, course):
 # in this view I only aim to produce those questions
 # and answers in with that topic
 def questions_view(request, topic_id):
+    user = request.user
+    paidState = request.user
+    paid = paidState.paidup 
     # an empty list that I will use to append the query set for all
     # the answers for each question
     all_answers = []
     # get the topic with the corresponding topic_id
     get_topic = Topic.objects.get(id=topic_id)
     # get the queryset of all the mcq questions under/with this topic
-    get_questions = Question.objects.filter(topic=get_topic)
+    if paid:
+        get_questions = Question.objects.filter(topic=get_topic)
+    else:
+        get_questions = Question.objects.filter(topic = get_topic)[:4]
+    totalQs = len(Question.objects.filter(topic=get_topic))
     # create a for loop that gets the answers for each particular question
     for question in get_questions:
         # this creates a queryset with all the answers for each question
@@ -54,13 +61,22 @@ def questions_view(request, topic_id):
     page_obj = paginator.get_page(page_number)
     return render(request, "myQBank/topics.html", {
         #all_questions": all_answers,
-        "all_questions": page_obj
+        "all_questions": page_obj,
+        "greedy": True,
+        "total": totalQs
     })
 def essays_view(request, topic_id):
     # get all the main questions
+    user = request.user
+    paid = user.paidup
     topicID = int(topic_id)
     get_topic = Topic.objects.get(id=topicID)
-    mainEssays = EssayQuestion.objects.filter(topic=get_topic)
+    if paid:
+        mainEssays = EssayQuestion.objects.filter(topic=get_topic)
+    else:
+        print("This guy hasn't paid")
+        mainEssays = EssayQuestion.objects.filter(topic=get_topic)[:1]
+    totalQs = len(EssayQuestion.objects.filter(topic=get_topic))
     all_questions = []
     #have a list of lists so each list will be like this
     #a question followed by it's subquestions, then to see the answer I will
@@ -77,7 +93,9 @@ def essays_view(request, topic_id):
         #q_subqs.append(all_subqs)
         all_questions.append(q_subqs)
     return render(request, "myQBank/essays.html", {
-        "all_questions": all_questions
+        "all_questions": all_questions,
+        "greedy": True,
+        "total": totalQs
     })
 
 def login_view(request):

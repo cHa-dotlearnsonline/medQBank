@@ -3,7 +3,16 @@
 {% block body %} 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-11 margin-giver">            
+        
+        <div class="col-sm-11 margin-giver">
+        {% if greedy %}  
+        {% if user.paidup %}
+        <em></em>
+        {% else %}
+        <p>There's {{total}} question(s) in this topic. To access those call <strong>0973501628</strong>. It's only<h4>K10</h4/p>
+        <p>You will gain access to all the questions in this Database.</p> 
+        {% endif %}
+        {% endif %}          
             {% for question in all_questions %}
             <div style="text-align: left;">
                 {{question.0.question.html|safe}}

@@ -5,7 +5,7 @@ from django_quill.fields import QuillField
 # Create your models here.
 
 class User(AbstractUser):
-    pass
+    paidup= models.BooleanField(default=False)
 
 # This just records the particular course
 class Course(models.Model):
