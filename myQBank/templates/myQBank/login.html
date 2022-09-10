@@ -10,6 +10,7 @@
         <div class="row d-flex justify-content-center">
             <h2 class="col-sm-12">Login</h2>
             <div class="col-md-4">
+                <p>Remove any 'spaces' from your "username" to login properly. Username contains only letters, numbers, and @/./+/-/_ characters.</p>
                 <form action="{% url 'login' %}" method="post">
                     {% csrf_token %}
                     <div class="form-group">
