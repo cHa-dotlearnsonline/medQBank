@@ -1,10 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django_quill.fields import QuillField 
+from django.core import validators
 
 # Create your models here.
 
 class User(AbstractUser):
+    validators=[
+                validators.RegexValidator(
+                    r'^[\w.@+-\s]+$',
+                    ('Enter a valid username. This value may contain only '
+                      'letters, numbers, spaces ' 'and @/./+/-/_ characters.')
+                ),
+            ]
     paidup= models.BooleanField(default=False)
 
 # This just records the particular course
