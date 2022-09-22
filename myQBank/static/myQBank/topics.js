@@ -64,18 +64,18 @@ function allowAttempt() {
                                                 }
                                             })
                                         }
-                                        fetch('/attempts',{
-                                            method: 'POST',
-                                            body: JSON.stringify({
-                                                question:questionID,
-                                                attempts:questionNumber.dataset.attempts,
-                                                correct:questionNumber.dataset.correct,
-                                                course:questionNumber.dataset.course,
-                                                topic:questionNumber.dataset.topic,
-                                                }),
-                                                headers: { 'X-CSRFToken': csrftoken},
-                                                mode: 'same-origin'
-                                            })
+                                        // fetch('/attempts',{
+                                        //     method: 'POST',
+                                        //     body: JSON.stringify({
+                                        //         question:questionID,
+                                        //         attempts:questionNumber.dataset.attempts,
+                                        //         correct:questionNumber.dataset.correct,
+                                        //         course:questionNumber.dataset.course,
+                                        //         topic:questionNumber.dataset.topic,
+                                        //         }),
+                                        //         headers: { 'X-CSRFToken': csrftoken},
+                                        //         mode: 'same-origin'
+                                        //     })
                                     }
                                     questionNumber.dataset.clicked = 1
                                 })
